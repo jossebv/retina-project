@@ -22,8 +22,8 @@
 /* Defines and enums ----------------------------------------------------------*/
 /* Defines */
 #define IR_TX_0_ID 0    /*!< Infrared transmitter identifier*/
-#define IR_TX_0_GPIO GPIOA   /*!< Infrared transmitter GPIO port*/
-#define IR_TX_0_PIN 0     /*!< Infrared transmitter GPIO pin*/
+#define IR_TX_0_GPIO GPIOB   /*!< Infrared transmitter GPIO port*/
+#define IR_TX_0_PIN 10     /*!< Infrared transmitter GPIO pin*/
 
 /* Function prototypes and explanation -------------------------------------------------*/
 /**

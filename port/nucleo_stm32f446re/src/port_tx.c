@@ -101,16 +101,16 @@ static void _timer_pwm_setup(uint32_t tx_id)
   /*Generate an update event*/
   TIM2->EGR = TIM_EGR_UG;
 
-  /*Disable output commpare of CH2*/
-  TIM2->CCER &= ~TIM_CCER_CC1E;
+  /*Disable output commpare of CH3*/
+  TIM2->CCER &= ~TIM_CCER_CC3E;
 
-  /*Set both mode PWM 1 and enable preload register of CH1*/
-  TIM2->CCMR1 |= TIM_AS_PWM1_MASK;
-  TIM2->CCMR1 |= TIM_CCMR1_OC1PE;
+  /*Set both mode PWM 1 and enable preload register of CH3*/
+  TIM2->CCMR2 |= TIM_AS_PWM1_MASK;
+  TIM2->CCMR2 |= TIM_CCMR2_OC3PE;
 
-  /*Set the pulse width of CH2*/
-  uint32_t ccr1 = NEC_PWM_DC * (TIM2->ARR+1);
-  TIM2->CCR1 = ccr1;  
+  /*Set the pulse width of CH3*/
+  uint32_t ccr3 = NEC_PWM_DC * (TIM2->ARR+1);
+  TIM2->CCR3 = ccr3;  
 }
 
 /* Public functions */
@@ -132,12 +132,12 @@ void port_tx_pwm_timer_set(uint8_t tx_id, bool status)
 {
   if(status)
   {
-    TIM2->CCER |= TIM_CCER_CC1E;
+    TIM2->CCER |= TIM_CCER_CC3E;
     TIM2->CR1 |= TIM_CR1_CEN;
   }
   else
   {
-    TIM2->CCER &= ~TIM_CCER_CC1E;
+    TIM2->CCER &= ~TIM_CCER_CC3E;
     TIM2->CR1 &= ~TIM_CR1_CEN;
   }
 }
