@@ -62,3 +62,4 @@ docs/html/
 .vscode/.cortex-debug.peripherals.state.json
 .vscode/.cortex-debug.peripherals.state.json
 .gitignore
+output/retina-main.bin
