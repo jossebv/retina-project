@@ -15,6 +15,7 @@
 #include <stdbool.h>
 
 #include "port_system.h"
+#include "retina.h"
 
 /* HW dependent includes */
 #include "stm32f4xx.h"

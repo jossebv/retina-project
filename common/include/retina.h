@@ -27,27 +27,9 @@
 #include "fsm_retina_v2.h"
 #include "fsm_rx.h"
 
-/* Defines and enums ----------------------------------------------------------*/
-/* Defines */
-
-/* Enums */
-
-
-/* Typedefs --------------------------------------------------------------------*/
-
-
-/* Variables -------------------------------------------------------------------*/
-/* Extern variables */
-
-
-/* Function prototypes ---------------------------------------------------------*/
-/* Variable initialization functions */
-
-/* State machine input or transition functions */
-
-/* State machine output or action functions */
-
-/* Other auxiliary functions */
+/* Versions and peripherals */
+#define VERSION 2
+#define LCD_CONNECTED true
 
 
 #endif /* RETINA_H_ */

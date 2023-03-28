@@ -132,6 +132,11 @@ void port_lcd_init(uint8_t lcd_id)
 
 void port_lcd_print(uint8_t lcd_id, char string[])
 {
+    if (!LCD_CONNECTED)
+    {
+        return;
+    }
+    
     GPIO_TypeDef *p_port = lcd_array[lcd_id].p_port;
     uint8_t pin = lcd_array[lcd_id].pin;
 

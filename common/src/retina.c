@@ -8,16 +8,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "retina.h"
 
-/* Definitions ---------------------------------------------------------------*/
-
-/* Variable initialization functions */
-
-/* State machine input or transition functions */
-
-/* State machine output or action functions */
-
-/* Other auxiliary functions */
-
 /**
  * @brief  The application entry point.
  * @retval int
@@ -27,18 +17,28 @@ int main(void)
     /* Inicializamos el sistema*/
     port_system_init();
     
-    /* Inicializamos pantalla*/
-    port_lcd_init(0);
+    if (LCD_CONNECTED)
+    {
+        /* Inicializamos pantalla*/
+        port_lcd_init(0);
 
-    port_lcd_print(0, "Modo TX");
-    
-    /*Creamos los botones*/
-    fsm_t* p_fsm_user_button = fsm_button_new(150, 0);
-    fsm_t* p_fsm_button_1 = fsm_button_new(200, 1);
-    // fsm_t* p_fsm_button_2 = fsm_button_new(200, 2);
-    // fsm_t* p_fsm_button_3 = fsm_button_new(200, 3);
-    //fsm_t* p_fsm_button_4 = fsm_button_new(200, 4);
+        port_lcd_print(0, "Modo TX");
+    }
 
+    /* Creamos el array de botones*/
+    fsm_t* button_arr[NUMBER_BUTTONS];
+
+    if (VERSION < 5)
+    {
+        button_arr[0] = fsm_button_new(150, 0);
+    }
+    else
+    {
+        for (uint8_t i = 0; i < NUMBER_BUTTONS; i++)
+        {
+            button_arr[i] = fsm_button_new(150,i);
+        }
+    }
 
     /*Creamos el transmisor*/
     fsm_t* p_fsm_tx = fsm_tx_new(0);
@@ -46,30 +46,31 @@ int main(void)
     /*Creamos el receptor*/
     fsm_t *p_fsm_rx = fsm_rx_new(0);
 
-    /* Creamos el array de botones*/
-    fsm_t* button_arr[NUMBER_BUTTONS];
-    
+    fsm_t *p_fsm_retina;
 
-    button_arr[0] = p_fsm_user_button;
-    button_arr[1] = p_fsm_button_1;
-    // button_arr[2] = p_fsm_button_2;
-    // button_arr[3] = p_fsm_button_3;
-    //button_arr[4] = p_fsm_button_4;
-
-    /*Creamos la FSM principal*/
-    fsm_t *p_fsm_retina = fsm_retina_new_v2(button_arr, 1000, p_fsm_tx, p_fsm_rx);
-
-    //fsm_t* p_fsm_retina = fsm_retina_new(p_fsm_user_button, 1000, p_fsm_tx, p_fsm_rx);
+    if (VERSION < 5)
+    {
+        p_fsm_retina = fsm_retina_new(button_arr[0], 1000, p_fsm_tx, p_fsm_rx);
+    }
+    else
+    {
+        p_fsm_retina = fsm_retina_new_v2(button_arr, 1000, p_fsm_tx, p_fsm_rx);
+    }
 
     while(1)
     {
-        /*Fire the fsm*/
         for (uint8_t i = 0; i < NUMBER_BUTTONS; i++)
         {
             fsm_fire(button_arr[i]);
         }
-        fsm_fire(p_fsm_tx);
-        fsm_fire(p_fsm_rx);
+        if (VERSION >= 2)
+        {
+            fsm_fire(p_fsm_tx);
+        }
+        if (VERSION >= 3)
+        {
+            fsm_fire(p_fsm_rx);
+        }
         fsm_fire(p_fsm_retina);
     }
 
