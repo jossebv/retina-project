@@ -251,7 +251,7 @@ void fsm_retina_init(fsm_t *p_this, fsm_t *p_fsm_button, uint32_t button_press_t
     p_fsm->tx_codes_index = 0;
 
     /*Codes array*/
-    p_fsm->tx_codes_arr[0] = MY_RED_BUTTON;
-    p_fsm->tx_codes_arr[1] = MY_GREEN_BUTTON;
-    p_fsm->tx_codes_arr[2] = MY_BLUE_BUTTON;
+    p_fsm->tx_codes_arr[0] = LIL_RED_BUTTON;
+    p_fsm->tx_codes_arr[1] = LIL_GREEN_BUTTON;
+    p_fsm->tx_codes_arr[2] = LIL_BLUE_BUTTON;
 }

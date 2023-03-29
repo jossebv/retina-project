@@ -1,9 +1,9 @@
 /**
  * @file fsm_rx.h
  * @brief Header for fsm_rx.c file.
- * @author alumno1
- * @author alumno2
- * @date fecha
+ * @author Jose Manuel Bravo Pacheco
+ * @author Victor Garcia Garcia
+ * @date 15/02/2023
  */
 
 #ifndef FSM_RX_H_

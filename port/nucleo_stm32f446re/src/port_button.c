@@ -14,6 +14,9 @@
 #include "port_rx.h"
 
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Structo to define the HW dependencies of a button
+*/
 typedef struct
 {
     GPIO_TypeDef *p_port;   

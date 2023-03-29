@@ -12,6 +12,9 @@
 #include "port_system.h"
 
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Struct to define the FSM of a button
+*/
 typedef struct
 {
     fsm_t f;    /*!< Button FSM */

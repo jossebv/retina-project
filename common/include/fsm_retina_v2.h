@@ -1,9 +1,9 @@
 /**
- * @file fsm_retina.h
- * @brief Header for fsm_retina.c file.
+ * @file fsm_retina_v2.h
+ * @brief Header for fsm_retina_v2.c file.
  * @author Jose Manuel Bravo Pacheco
  * @author Victor Garcia Garcia
- * @date fecha
+ * @date 22/02/2023
  */
 #ifndef FSM_RETINA_V2_H_
 #define FSM_RETINA_V2_H_

@@ -35,7 +35,7 @@ enum
 
 /* Typedefs --------------------------------------------------------------------*/
 /**
- * @brief Structure to define the Retina FSM.
+ * @brief Structure to define the Retina FSM on its second version.
  */
 typedef struct
 {

@@ -18,6 +18,9 @@
 #include "port_rx.h"
 
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Struct to define the RX FSM
+*/
 typedef struct
 {
   fsm_t f;  /*!< Infrared receiver FSM*/

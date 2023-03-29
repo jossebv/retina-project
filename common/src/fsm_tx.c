@@ -12,6 +12,9 @@
 #include "port_tx.h"
 
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Struct to define the TX FSM
+*/
 typedef struct{
     fsm_t f;    /*!< Infrared transmitter fsm*/
     uint32_t code;  /*!< NEC code to be sent*/

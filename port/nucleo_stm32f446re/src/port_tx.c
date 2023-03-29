@@ -19,6 +19,9 @@ The timer symbol is the same for all the TX, so it is not in the structure of TX
 */
 
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Struct to define the HW dependencies of a TX
+*/
 typedef struct{
   GPIO_TypeDef *p_port; /*!< GPIO where the transmitter is connected*/
   uint8_t pin;   /*!< Pin/line where the infrared transmitter is connected*/

@@ -14,6 +14,9 @@
 #include "fsm_rx_nec.h"
 
 /* Typedefs --------------------------------------------------------------------*/
+/**
+ * @brief Struct to define the rx_nec FSM
+*/
 typedef struct
 {
   fsm_t f;  /*!< NEC FSM*/
