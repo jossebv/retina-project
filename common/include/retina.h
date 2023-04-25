@@ -28,7 +28,7 @@
 #include "fsm_rx.h"
 
 /* Versions and peripherals */
-#define VERSION 2
+#define VERSION 5
 #define LCD_CONNECTED true
 
 
