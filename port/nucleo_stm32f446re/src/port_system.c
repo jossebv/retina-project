@@ -12,17 +12,17 @@
 #define HSI_VALUE ((uint32_t)16000000) /*!< Value of the Internal oscillator in Hz */
 
 #define BASE_MODER_MASK 0x03 /*!< Define moder mask*/
-#define BASE_PUPDR_MASK 0x03  /*!< Define pupdr mask*/
+#define BASE_PUPDR_MASK 0x03 /*!< Define pupdr mask*/
 #define BASE_EXTIX_MASK 0x0F
 
 /* GLOBAL VARIABLES */
-static volatile uint32_t msTicks = 0; /*!< Variable to store millisecond ticks */
+static volatile uint32_t msTicks = 0;     /*!< Variable to store millisecond ticks */
 static volatile uint32_t microsTicks = 0; /*!< Variable to store microseconds ticks */
 
 /* These variables are declared extern in CMSIS (system_stm32f4xx.h) */
-uint32_t SystemCoreClock = HSI_VALUE; /*!< Frequency of the System clock */
+uint32_t SystemCoreClock = HSI_VALUE;                                               /*!< Frequency of the System clock */
 const uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9}; /*!< Prescaler values for AHB bus */
-const uint8_t APBPrescTable[8] = {0, 0, 0, 0, 1, 2, 3, 4}; /*!< Prescaler values for APB bus */
+const uint8_t APBPrescTable[8] = {0, 0, 0, 0, 1, 2, 3, 4};                          /*!< Prescaler values for APB bus */
 
 //------------------------------------------------------
 // SYSTEM CONFIGURATION
@@ -124,6 +124,20 @@ size_t port_system_init()
   return 0;
 }
 
+void port_system_power_stop()
+{
+  MODIFY_REG(PWR->CR, (PWR_CR_PDDS | PWR_CR_LPDS), PWR_CR_LPDS); // Select the regulator state in Stop mode: Set PDDS and LPDS bits according to PWR_Regulator value
+  SCB->SCR |= ((uint32_t)SCB_SCR_SLEEPDEEP_Msk);                 // Set SLEEPDEEP bit of Cortex System Control Register
+  __WFI();                                                       // Select Stop mode entry : Request Wait For Interrupt
+  SCB->SCR &= ~((uint32_t)SCB_SCR_SLEEPDEEP_Msk);                // Reset SLEEPDEEP bit of Cortex System Control Register
+}
+
+void port_system_sleep()
+{
+  port_system_systick_suspend();
+  port_system_power_stop();
+}
+
 //------------------------------------------------------
 // TIMER RELATED FUNCTIONS
 //------------------------------------------------------
@@ -178,6 +192,16 @@ void port_system_delay_micros(uint32_t micros)
   }
 }
 
+void port_system_systick_suspend()
+{
+  SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+}
+
+void port_system_systick_resume()
+{
+  SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
+}
+
 //------------------------------------------------------
 // GPIO RELATED FUNCTIONS
 //------------------------------------------------------
@@ -198,28 +222,28 @@ void port_system_delay_micros(uint32_t micros)
  */
 
 void port_system_gpio_config(GPIO_TypeDef *port, uint8_t pin, uint8_t mode, uint8_t pupd)
-{ 
+{
   /*Enables the clock of the GPIOX*/
-  if(port == GPIOA)
+  if (port == GPIOA)
   {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
   }
-  else if(port == GPIOB)
+  else if (port == GPIOB)
   {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
   }
-  else if(port == GPIOC)
+  else if (port == GPIOC)
   {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
   }
 
   /*Sets the PIN MODE*/
-  port->MODER &= ~BASE_MASK_TO_POS(BASE_MODER_MASK, 2*pin);
-  port->MODER |= BASE_MASK_TO_POS(mode, 2*pin);
+  port->MODER &= ~BASE_MASK_TO_POS(BASE_MODER_MASK, 2 * pin);
+  port->MODER |= BASE_MASK_TO_POS(mode, 2 * pin);
 
   /*Sets the pull-up/pull-down resistance*/
-  port->PUPDR &= ~BASE_MASK_TO_POS(BASE_PUPDR_MASK,2*pin);
-  port->PUPDR |= BASE_MASK_TO_POS(pupd,2*pin);
+  port->PUPDR &= ~BASE_MASK_TO_POS(BASE_PUPDR_MASK, 2 * pin);
+  port->PUPDR |= BASE_MASK_TO_POS(pupd, 2 * pin);
 }
 
 /**
@@ -237,8 +261,8 @@ void port_system_gpio_config(GPIO_TypeDef *port, uint8_t pin, uint8_t mode, uint
  */
 void port_system_gpio_config_alternate(GPIO_TypeDef *port, uint8_t pin, uint8_t alternate)
 {
-  port->AFR[pin/8] &= ~BASE_MASK_TO_POS(BASE_ALTERNATE_MASK, 4*(pin%8));
-  port->AFR[pin/8] |= BASE_MASK_TO_POS(alternate, 4*(pin%8));
+  port->AFR[pin / 8] &= ~BASE_MASK_TO_POS(BASE_ALTERNATE_MASK, 4 * (pin % 8));
+  port->AFR[pin / 8] |= BASE_MASK_TO_POS(alternate, 4 * (pin % 8));
 }
 
 /**
@@ -256,50 +280,50 @@ void port_system_gpio_config_exti(GPIO_TypeDef *port, uint8_t pin, uint32_t mode
 
   /*Associate the exti with the GPIO*/
   uint8_t mascara;
-  SYSCFG->EXTICR[pin/4] &= ~BASE_MASK_TO_POS(BASE_EXTIX_MASK,4*(pin%4));
-  if(port == GPIOA)
+  SYSCFG->EXTICR[pin / 4] &= ~BASE_MASK_TO_POS(BASE_EXTIX_MASK, 4 * (pin % 4));
+  if (port == GPIOA)
   {
     mascara = 0x00;
   }
-  else if(port == GPIOB)
+  else if (port == GPIOB)
   {
     mascara = 0x01;
   }
-  else if(port == GPIOC)
+  else if (port == GPIOC)
   {
     mascara = 0x02;
   }
-  SYSCFG->EXTICR[pin/4] |= BASE_MASK_TO_POS(mascara, 4*(pin%4));
+  SYSCFG->EXTICR[pin / 4] |= BASE_MASK_TO_POS(mascara, 4 * (pin % 4));
 
   /*Interruption trigger*/
-  if((mode & BASE_MASK_TO_POS(0x3,0)) == TRIGGER_RISING_EDGE)
+  if ((mode & BASE_MASK_TO_POS(0x3, 0)) == TRIGGER_RISING_EDGE)
   {
     EXTI->RTSR |= BIT_POS_TO_MASK(pin); /*Rising edge*/
   }
-  else if((mode & BASE_MASK_TO_POS(0x3,0)) == TRIGGER_FALLING_EDGE)
+  else if ((mode & BASE_MASK_TO_POS(0x3, 0)) == TRIGGER_FALLING_EDGE)
   {
     EXTI->FTSR |= BIT_POS_TO_MASK(pin); /*Falling edge*/
   }
-  else if((mode & BASE_MASK_TO_POS(0x3,0)) == TRIGGER_BOTH_EDGE)
+  else if ((mode & BASE_MASK_TO_POS(0x3, 0)) == TRIGGER_BOTH_EDGE)
   {
     EXTI->RTSR |= BIT_POS_TO_MASK(pin); /*Rising edge*/
     EXTI->FTSR |= BIT_POS_TO_MASK(pin); /*Falling edge*/
-  }
-  
-  /*Enable local interrupt and event*/
-  if((mode & BASE_MASK_TO_POS(0x3,2)) == TRIGGER_ENABLE_INTERR_REQ){
-    EXTI->IMR |= BIT_POS_TO_MASK(pin);
-  }
-  else if((mode & BASE_MASK_TO_POS(0x3,2)) == TRIGGER_ENABLE_EVENT_REQ)
-  {
-    EXTI->EMR |= BIT_POS_TO_MASK(pin);
-  }
-  else if((mode & BASE_MASK_TO_POS(0x3,2)) == TRIGGER_ENABLE_EVENT_AND_INTERR_REQ)
-  {
-    EXTI->EMR |= BIT_POS_TO_MASK(pin);
-    EXTI->IMR |= BIT_POS_TO_MASK(pin);
   }
 
+  /*Enable local interrupt and event*/
+  if ((mode & BASE_MASK_TO_POS(0x3, 2)) == TRIGGER_ENABLE_INTERR_REQ)
+  {
+    EXTI->IMR |= BIT_POS_TO_MASK(pin);
+  }
+  else if ((mode & BASE_MASK_TO_POS(0x3, 2)) == TRIGGER_ENABLE_EVENT_REQ)
+  {
+    EXTI->EMR |= BIT_POS_TO_MASK(pin);
+  }
+  else if ((mode & BASE_MASK_TO_POS(0x3, 2)) == TRIGGER_ENABLE_EVENT_AND_INTERR_REQ)
+  {
+    EXTI->EMR |= BIT_POS_TO_MASK(pin);
+    EXTI->IMR |= BIT_POS_TO_MASK(pin);
+  }
 }
 
 /**
@@ -325,7 +349,7 @@ void port_system_gpio_exti_enable(uint8_t pin, uint8_t priority, uint8_t subprio
  * @retval None
  */
 void port_system_gpio_exti_disable(uint8_t pin)
-{  
+{
   NVIC_DisableIRQ(GET_PIN_IRQN(pin));
 }
 
@@ -340,13 +364,13 @@ void port_system_gpio_exti_disable(uint8_t pin)
  */
 bool port_system_gpio_read(GPIO_TypeDef *port, uint8_t pin)
 {
-  return (bool) (port->IDR & BIT_POS_TO_MASK(pin));
+  return (bool)(port->IDR & BIT_POS_TO_MASK(pin));
 }
 
 /**
  * @brief Write a digital value in a GPIO atomically
  *
- * @note You can use a +16 offset on the pin index and use the `BIT_POS_TO_MASK(pin)` macro to get the mask when you go to clear a GPIO. Otherwise, you can calculate the pin mask first and then use a 16-position left shift of the mask. 
+ * @note You can use a +16 offset on the pin index and use the `BIT_POS_TO_MASK(pin)` macro to get the mask when you go to clear a GPIO. Otherwise, you can calculate the pin mask first and then use a 16-position left shift of the mask.
  *
  * @param port Port of the GPIO (CMSIS struct like)
  * @param pin Pin/line of the GPIO (index from 0 to 15)
@@ -356,7 +380,7 @@ bool port_system_gpio_read(GPIO_TypeDef *port, uint8_t pin)
  */
 void port_system_gpio_write(GPIO_TypeDef *port, uint8_t pin, bool value)
 {
-  if(value)
+  if (value)
   {
     port->BSRR = BIT_POS_TO_MASK(pin);
   }
@@ -376,23 +400,22 @@ void port_system_gpio_write(GPIO_TypeDef *port, uint8_t pin, bool value)
  */
 void port_system_gpio_toggle(GPIO_TypeDef *port, uint8_t pin)
 {
-  if(port_system_gpio_read(port,pin))
+  if (port_system_gpio_read(port, pin))
   {
     port_system_gpio_write(port, pin, 0);
   }
   else
   {
-    port_system_gpio_write(port,pin,1);
+    port_system_gpio_write(port, pin, 1);
   }
 }
 
-void port_system_gpio_clear(GPIO_TypeDef* port)
+void port_system_gpio_clear(GPIO_TypeDef *port)
 {
   for (uint8_t i = 0; i < 16; i++)
   {
     port_system_gpio_write(port, i, 0);
   }
-  
 }
 
 //------------------------------------------------------
@@ -400,12 +423,12 @@ void port_system_gpio_clear(GPIO_TypeDef* port)
 //------------------------------------------------------
 /**
  * @brief This function handles the System tick timer that increments the system millisecond counter (global variable).
- * 
+ *
  */
 void SysTick_Handler(void)
 {
-  /* TO-DO alumnos */  
-  msTicks++;  
+  /* TO-DO alumnos */
+  msTicks++;
 }
 
 uint32_t port_system_get_millis(void)
@@ -413,7 +436,7 @@ uint32_t port_system_get_millis(void)
   return msTicks;
 }
 
-void TIM5_IRQHandler ()
+void TIM5_IRQHandler()
 {
   microsTicks++;
   TIM5->SR &= ~TIM_SR_UIF;

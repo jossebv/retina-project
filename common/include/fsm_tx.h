@@ -66,4 +66,14 @@ void fsm_tx_set_code (fsm_t *p_this, uint32_t code);
  */
 void fsm_send_NEC_code (uint8_t tx_id, uint32_t code);
 
+/**
+ * @brief Check if the transmitter FSM is active, or not. As the system is the one controlling the output (PWM and symbol timer), this FSM will always be inactive and will wake up at each interruption of the symbol timer or PWM timer.
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_tx_t.
+ * 
+ * @return true
+ * @return false
+*/
+bool fsm_tx_check_activity(fsm_t* p_this);
+
 #endif

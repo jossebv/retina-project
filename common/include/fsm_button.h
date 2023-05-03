@@ -56,4 +56,14 @@ uint32_t fsm_button_get_duration (fsm_t *p_this);
  */
 void fsm_button_reset_duration (fsm_t *p_this);
 
+/**
+ * @brief Check if the button FSM is active or not
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_button_t structure
+ * 
+ * @return true
+ * @return false
+*/
+bool fsm_button_check_activity(fsm_t *p_this);
+
 #endif

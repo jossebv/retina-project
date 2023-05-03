@@ -22,6 +22,8 @@ enum
 {
     WAIT_TX = 0, /*!< **Single state in Version 2**. State to wait in transmission mode */
     WAIT_RX,    /*!< State to wait in receiver mode*/
+    SLEEP_TX, /*!< State to be sleeping in transmission mode*/
+    SLEEP_RX, /*!< State to be sleeping in reception mode*/
 };
 
 /* Typedefs --------------------------------------------------------------------*/
@@ -116,7 +118,38 @@ static bool check_error(fsm_t *p_this)
     return fsm_rx_get_error_code(p_fsm->p_fsm_rx);
 }
 
-/* State machine output or action functions */
+/**
+ * @brief Check if any of the elements of the system is active
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
+ * 
+ * @return true
+ * @return false
+*/
+static bool check_activity(fsm_t *p_this)
+{
+    fsm_retina_t *p_fsm = (fsm_retina_t*) p_this;
+
+    return (fsm_button_check_activity(p_fsm->p_fsm_button) || fsm_tx_check_activity(p_fsm->p_fsm_tx) || fsm_rx_check_activity(p_fsm->p_fsm_rx));
+}
+
+/**
+ * @brief Check if any of the elements of the system is not active
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
+ * 
+ * @return true
+ * @return false
+*/
+static bool check_no_activity(fsm_t *p_this)
+{
+    return !check_activity(p_this);
+}
+
+
+///////////////////////////////////////////////////////////////////////
+        /* State machine output or action functions */
+///////////////////////////////////////////////////////////////////////
 /**
  * @brief Transmit the next code stored in memory after a short button press.
  * 
@@ -218,15 +251,31 @@ static void do_discard_rx_and_reset(fsm_t *p_this)
     fsm_rx_reset_code(p_fsm->p_fsm_rx);
 }
 
+/**
+ * @brief  Start the low power mode
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
+*/
+static void do_sleep(fsm_t *p_this)
+{
+    port_system_sleep();
+}
+
 /*Transition table*/
 
 static fsm_trans_t fsm_trans_retina[] = {
     {WAIT_TX, check_short_pressed, WAIT_TX, do_send_next_msg},
     {WAIT_TX, check_long_pressed, WAIT_RX, do_tx_off_rx_on},
+    {WAIT_TX, check_no_activity, SLEEP_TX, do_sleep},
+    {SLEEP_TX, check_no_activity, SLEEP_TX, do_sleep},
+    {SLEEP_TX, check_activity, WAIT_TX, NULL},
     {WAIT_RX, check_code, WAIT_RX, do_execute_code},
     {WAIT_RX, check_repetition, WAIT_RX, do_execute_repetition},
     {WAIT_RX, check_error, WAIT_RX, do_discard_rx_and_reset},
     {WAIT_RX, check_long_pressed, WAIT_TX, do_rx_off_tx_on},
+    {WAIT_RX, check_no_activity, SLEEP_RX, do_sleep},
+    {SLEEP_RX, check_no_activity, SLEEP_RX, do_sleep},
+    {SLEEP_RX, check_activity, WAIT_RX, NULL},
     {-1, NULL, -1, NULL}
 };
 

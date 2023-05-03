@@ -243,3 +243,10 @@ fsm_t *fsm_rx_new(uint8_t rx_id)
   fsm_rx_init(p_fsm, rx_id);
   return p_fsm;
 }
+
+bool fsm_rx_check_activity(fsm_t* p_this)
+{
+  fsm_rx_t* p_fsm = (fsm_rx_t*) p_this;
+
+  return (p_fsm->f.current_state == WAIT_RX);
+}

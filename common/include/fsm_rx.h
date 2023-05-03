@@ -88,4 +88,14 @@ void fsm_rx_set_rx_status (fsm_t *p_this, bool status);
  */
 void fsm_rx_reset_code (fsm_t *p_this);
 
+/**
+ * @brief Checks if the receiver FSM is active or not
+ * 
+ * @param p_this Pointer to an fsm_t structure that contains an fsm_rx_t
+ * 
+ * @return true
+ * @return false
+*/
+bool fsm_rx_check_activity(fsm_t *p_this);
+
 #endif

@@ -89,6 +89,7 @@ bool* port_button_get_p_flag(uint8_t button_id)
  */
 void EXTI15_10_IRQHandler(void)
 {
+    port_system_systick_resume();
     /* ISR user button in PC13 */
     if (EXTI->PR & BIT_POS_TO_MASK(buttons_arr[BUTTON_0_ID].pin))
     {
@@ -126,6 +127,7 @@ void EXTI15_10_IRQHandler(void)
 
 void EXTI1_IRQHandler()
 {
+    port_system_systick_resume();
     EXTI->PR |= BIT_POS_TO_MASK(buttons_arr[BUTTON_3_ID].pin);
     if(buttons_arr[BUTTON_3_ID].p_port->IDR & BIT_POS_TO_MASK(buttons_arr[BUTTON_3_ID].pin)){
         buttons_arr[BUTTON_3_ID].flag_pressed = false;

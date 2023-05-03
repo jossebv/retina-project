@@ -166,6 +166,7 @@ void port_rx_clean_buffer(uint8_t rx_id)
 /* Interruption Rutine Handler 9-5*/
 void EXTI9_5_IRQHandler(void)
 {
+  port_system_systick_resume();
   /*Interruption on pin PA8*/
   if (EXTI->PR & BIT_POS_TO_MASK(receivers_arr[IR_RX_0_ID].pin))
   {

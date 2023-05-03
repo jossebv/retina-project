@@ -78,11 +78,22 @@
 size_t port_system_init(void);
 
 /**
+ * @brief Enable low power consumption in sleep mode. 
+*/
+void port_system_sleep();
+
+/**
+ * @brief Set the system in stop mode for low power consumption.
+
+    The function sets the state of the power regulator in stop mode.
+    After that, the function sets the system mode in sleep mode, to enter in stop mode when calling _WFI() (wait for interruption).
+    The system remains in this line until an external interruption or timer interruption occurs.
+    If an interruption occurs the system wakes up and resets the system mode.
+*/
+void port_system_power_stop();
+
+/**
  * @brief Get the count of the System tick in milliseconds
- *
- * > **TO-DO alumnos:**
- * >
- * > ✅ 1. Return System tick \n
  *
  * @return uint32_t
  */
@@ -133,6 +144,20 @@ void port_system_timer5_init(uint16_t arr, uint16_t psc);
  */
 void port_system_delay_micros(uint32_t micros);
 
+/**
+ * @brief Suspend Tick increment.
+
+The SysTick timer is the source of time base. It is used to generate interrupts at regular time intervals. Once this function is called, the SysTick interrupt will be disabled so it saves more energy and it does not generate any interruption.
+*/
+void port_system_systick_suspend();
+
+/**
+ * @brief Resume Tick increment.
+
+The SysTick timer is the source of time base. It is used to generate interrupts at regular time intervals. Once this function is called, the SysTick interrupt will be enabled and so Tick increment is resumed.
+*/
+void port_system_systick_resume();
+
 /** @verbatim
       ==============================================================================
                               ##### How to use GPIOs #####
@@ -162,12 +187,6 @@ void port_system_delay_micros(uint32_t micros);
 /**
  * @brief Configure the mode and pull of a GPIO
  *
- * > **TO-DO alumnos:**
- * >
- * > ✅ 1. Enable GPIOx clock in AHB1ENR \n
- * > ✅ 2. Set mode in MODER \n
- * > ✅ 3. Set pull up/down configuration
- *
  * @note This function performs the GPIO Port Clock Enable. It may occur that a port clock is re-enabled,
  *       it does not matter if it was already enabled. *
  * @note This function enables the AHB1 peripheral clock. After reset, the peripheral clock (used for registers
@@ -185,21 +204,6 @@ void port_system_gpio_config(GPIO_TypeDef *port, uint8_t pin, uint8_t mode, uint
 /**
  * @brief Configure the alternate function of a GPIO
  *
- * > **TO-DO alumnos:**
- * >
- * > ✅ 1. **Create a 4-bit mask** depending on the given `pin` \n
- * > \n
- * > ✅ 2. Clean and set the bits **as shown in the tutorial document**. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 Clean the corresponding bit on element `0` or `1` of the AFR array (*e.g*, `GPIOA->AFR[0]`) \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 Set the given value (`alternate`) of the alternate function, using bit shifting, for example. \n
- * \n
- * > 💡 **You can define your own masks for each alternate function (not recommended), or you can use the `BASE_MASK_TO_POS(m, p)` macro to get the mask of a base mask. Example:** \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;A base mask `m` equals `0x03` (`0b 0000 0011` in binary) can be shifted `p` equals `8` positions `BASE_MASK_TO_POS(0x03, 8)` resulting in `0x300` (`0b 0011 0000 0000` in binary). \n
- *
- * @note The AFR register is a 2-element array representing GPIO alternate function high an low registers (GPIOx_AFRH and GPIOx_AFRL) \n
- * AFRLy: Alternate function selection for port x pin y (y = 0..7) \n
- * AFRHy: Alternate function selection for port x pin y (y = 8..15)
- *
  * @param port Port of the GPIO (CMSIS struct like)
  * @param pin Pin/line of the GPIO (index from 0 to 15)
  * @param alternate Alternate function number (values from 0 to 15) according to table of the datasheet: "Table 11. Alternate function".
@@ -210,27 +214,6 @@ void port_system_gpio_config_alternate(GPIO_TypeDef *port, uint8_t pin, uint8_t 
 
 /**
  * @brief Configure the external interruption or event of a GPIO
- *
- * > **TO-DO alumnos:**
- * >
- * > ✅ 1. **Enable the System configuration controller clock (SYSCFG).** Enable the SYSCFG by setting the bit SYSCFGEN of the peripheral clock enable register (RCC_APB2ENR). The system configuration controller is used here to manage the external interrupt line connection to the GPIOs. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 As usual, you can access to the register (`APB2ENR`) as element of the structure `RCC`. You can use the macro `RCC_APB2ENR_SYSCFGEN` defined in `stm32f446xx.h` to set the bit. Look for the "RCC_APB2ENR" register in the Reference Manual if you need more information. \n
- * > \n
- * > ✅ 2. **Associate the external interruption line to the given port.** Clean and set the bits **as shown in the tutorial document**. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 Depending on the pin number, use the register SYSCFG_EXTICR1, SYSCFG_EXTICR2, SYSCFG_EXTICR3, or SYSCFG_EXTICR4. The structure `SYSCFG` contains a 4-element array called `EXTICR`; the first element (`EXTICR[0]`) configures the register SYSCFG_EXTICR1, and so on. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 To clean the EXTIx bits, you can create a mask depending on the `pin` value.   \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 To associate the external interruption to the given port, *i.e.* to set the EXTIx bits, you can create another mask depending on the `port` value.   \n
- * > \n
- * > ✅ 3. **Select the direction of the trigger**: rising edge, falling edge, or both, depending on the value of the given `mode`.  \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 If *rising edge*: activate the corresponding bit on the EXTI_RTSR register (element `RTSR`) of the `EXTI` structure. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 If *falling edge*: activate the corresponding bit on the EXTI_FTSR register (element `FTSR`) of the `EXTI` structure. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 If *both*: activate the corresponding bit on both registers. \n
- * > \n
- * > ✅ 4. **Select the interrupt and/or event request**: depending on the  value of the given `mode`.  \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 If *event request* enable: activate the corresponding bit on the EXTI_EMR register (element `EMR`) of the `EXTI` structure. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 If *interrupt request* enable: activate the corresponding bit on the EXTI_IMR register (element `IMR`) of the `EXTI` structure. \n
- * \n
- * > 💡 **You can define your own masks for each pin value (not recommended), or you can use the `BIT_POS_TO_MASK(pin)` macro to get the mask of a pin.**
  *
  * @param port Port of the GPIO (CMSIS struct like)
  * @param pin Pin/line of the GPIO (index from 0 to 15)
@@ -262,14 +245,6 @@ void port_system_gpio_exti_disable(uint8_t pin);
 /**
  * @brief Read the digital value of a GPIO
  *
- * > **TO-DO alumnos:**
- * >
- * > ✅ 1. **Retrieve the value of the IDR register.** \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 You must cast the read value to return a `bool`. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 You might use the `BIT_POS_TO_MASK(pin)` macro. \n
- * > \n
- * > ✅ 2. **Return the value.**
- *
  * @param port Port of the GPIO (CMSIS struct like)
  * @param pin Pin/line of the GPIO (index from 0 to 15)
  *
@@ -281,13 +256,6 @@ bool port_system_gpio_read(GPIO_TypeDef *port, uint8_t pin);
 /**
  * @brief Toggle the value of a GPIO
  *
- * > **TO-DO alumnos:**
- * >
- * > ✅ 1. **Read the value of the GPIO.** \n
- * > \n
- * > ✅ 2. **Write the opposite value in the GPIO.** \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 You might use functions `port_system_gpio_read()` and `port_system_gpio_write()` to help you. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 You might use the macros `HIGH` and `LOW`. \n
  * @param port Port of the GPIO (CMSIS struct like)
  * @param pin Pin/line of the GPIO (index from 0 to 15)
  *
@@ -297,12 +265,6 @@ void port_system_gpio_toggle(GPIO_TypeDef *port, uint8_t pin);
 
 /**
  * @brief Write a digital value in a GPIO atomically
- *
- * > **TO-DO alumnos:**
- * >
- * > ✅ 1. **Set the corresponding bit value of the BSRR register** to *set* or *reset* the output depending on the given `value`. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 You might use the macros `HIGH` and `LOW`. \n
- * > &nbsp;&nbsp;&nbsp;&nbsp;💡 You might use the `BIT_POS_TO_MASK(pin)` macro. \n
  * 
  * @note You can use a +16 offset on the pin index and use the `BIT_POS_TO_MASK(pin)` macro to get the mask when you go to clear a GPIO. Otherwise, you can calculate the pin mask first and then use a 16-position left shift of the mask. 
  *

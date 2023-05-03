@@ -138,4 +138,9 @@ void fsm_tx_init(fsm_t *p_this, uint8_t tx_id)
     port_tx_init(tx_id,false);
 }
 
+bool fsm_tx_check_activity(fsm_t *p_this)
+{
+    fsm_tx_t* p_fsm = (fsm_tx_t*) p_this;
 
+    return (p_fsm->f.current_state != WAIT_TX);
+}

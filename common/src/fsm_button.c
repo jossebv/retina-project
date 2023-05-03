@@ -157,3 +157,10 @@ void fsm_button_reset_duration(fsm_t *p_this)
     fsm_button_t *p_fsm = (fsm_button_t*) p_this;
     p_fsm->duration=0;
 }
+
+bool fsm_button_check_activity(fsm_t *p_this)
+{
+    fsm_button_t *p_fsm = (fsm_button_t*) p_this;
+
+    return (p_fsm->f.current_state != BUTTON_RELEASED);
+}
