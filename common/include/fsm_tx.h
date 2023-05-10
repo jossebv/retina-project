@@ -30,7 +30,7 @@
 #define NEC_TX_EPILOGUE_TICKS_ON 562.5/NEC_TX_TIMER_TICK_BASE_US       /*!< Number of time base ticks for epilogue ON in transmission  */
 #define NEC_TX_EPILOGUE_TICKS_OFF 3560  /*!< Number of time base ticks for epilogue OFF in transmission ~200 miliseconds */
 #define NEC_PWM_FREQ_HZ 38000                /*!< PWM timer frequency in Hz */
-#define NEC_PWM_DC 0.35                     /*!< PWM duty cycle 0-1  */
+#define NEC_PWM_DC 0.5                     /*!< PWM duty cycle 0-1  */
 
 /* Function prototypes and explanation ----------------------------------------*/
 /**

@@ -2,6 +2,20 @@
     "files.associations": {
         "*.ejs": "html",
         "*.js": "javascript",
-        "retina.h": "c"
+        "retina.h": "c",
+        "stm32f411e_discovery_audio.h": "c",
+        "string.h": "c",
+        "pv_st_f411.h": "c",
+        "port_system.h": "c",
+        "stm32f411e_discovery.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "stm32f4xx.h": "c",
+        "port_tx.h": "c",
+        "port_lcd.h": "c",
+        "stdbool.h": "c",
+        "fsm_voice.h": "c",
+        "commands.h": "c",
+        "fsm_retina.h": "c",
+        "fsm_button.h": "c"
     }
 }

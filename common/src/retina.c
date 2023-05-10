@@ -8,6 +8,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "retina.h"
 
+#include "fsm_voice.h"
+
 /**
  * @brief  The application entry point.
  * @retval int
@@ -16,7 +18,7 @@ int main(void)
 {
     /* Inicializamos el sistema*/
     port_system_init();
-    
+
     if (LCD_CONNECTED)
     {
         /* Inicializamos pantalla*/
@@ -26,7 +28,7 @@ int main(void)
     }
 
     /* Creamos el array de botones*/
-    fsm_t* button_arr[NUMBER_BUTTONS];
+    fsm_t *button_arr[NUMBER_BUTTONS];
 
     if (VERSION < 5)
     {
@@ -36,30 +38,37 @@ int main(void)
     {
         for (uint8_t i = 0; i < NUMBER_BUTTONS; i++)
         {
-            button_arr[i] = fsm_button_new(150,i);
+            button_arr[i] = fsm_button_new(150, i);
         }
     }
 
     /*Creamos el transmisor*/
-    fsm_t* p_fsm_tx = fsm_tx_new(0);
+    fsm_t *p_fsm_tx = fsm_tx_new(0);
 
     /*Creamos el receptor*/
     fsm_t *p_fsm_rx = fsm_rx_new(0);
+
+    /* Creamos el picovoice */
+    fsm_t* p_fsm_voice = NULL;
+    if (PICOVOICE_ACTIVE)
+    {
+        p_fsm_voice = fsm_voice_new(p_fsm_tx);
+    }
 
     fsm_t *p_fsm_retina;
 
     if (VERSION < 5)
     {
-        p_fsm_retina = fsm_retina_new(button_arr[0], 1000, p_fsm_tx, p_fsm_rx);
+        p_fsm_retina = fsm_retina_new(button_arr[0], 1000, p_fsm_tx, p_fsm_rx, 0);
     }
     else
     {
         p_fsm_retina = fsm_retina_new_v2(button_arr, 1000, p_fsm_tx, p_fsm_rx);
     }
 
-    while(1)
+    while (1)
     {
-        for (uint8_t i = 0; i < NUMBER_BUTTONS; i++)
+        for (uint8_t i = 0; i < 1; i++)
         {
             fsm_fire(button_arr[i]);
         }
@@ -71,6 +80,11 @@ int main(void)
         {
             fsm_fire(p_fsm_rx);
         }
+        if (PICOVOICE_ACTIVE)
+        {
+            fsm_fire(p_fsm_voice);
+        }
+
         fsm_fire(p_fsm_retina);
     }
 

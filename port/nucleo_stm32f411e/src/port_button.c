@@ -19,9 +19,9 @@
 */
 typedef struct
 {
-    GPIO_TypeDef *p_port;   /*!< Port to which button is connected */
-    uint8_t pin;    /*!< Pin to which the button is connected */
-    bool flag_pressed;  /*!< Sets if the button is pressed or not*/
+    GPIO_TypeDef *p_port;   
+    uint8_t pin;
+    bool flag_pressed;
 } port_button_hw_t;
 
 
@@ -85,53 +85,14 @@ bool* port_button_get_p_flag(uint8_t button_id)
 // INTERRUPT SERVICE ROUTINES
 //------------------------------------------------------
 /**
- * @brief This function handles Px10-Px15 global interrupts.
- */
-void EXTI15_10_IRQHandler(void)
+ * @brief Handler for interruptions on PIN0
+*/
+void EXTI0_IRQHandler()
 {
-    port_system_systick_resume();
-    /* ISR user button in PC13 */
-    if (EXTI->PR & BIT_POS_TO_MASK(buttons_arr[BUTTON_0_ID].pin))
-    {
-        EXTI->PR |= BIT_POS_TO_MASK(buttons_arr[BUTTON_0_ID].pin);
-        if(buttons_arr[BUTTON_0_ID].p_port->IDR & BIT_POS_TO_MASK(buttons_arr[BUTTON_0_ID].pin)){
-            buttons_arr[BUTTON_0_ID].flag_pressed = false;
-        }
-        else{
-            buttons_arr[BUTTON_0_ID].flag_pressed = true;
-        }
-    }
-    /* ISR button 1*/
-    if (EXTI->PR & BIT_POS_TO_MASK(BUTTON_1_PIN))
-    {    
-        EXTI->PR |= BIT_POS_TO_MASK(buttons_arr[BUTTON_1_ID].pin);
-        if(buttons_arr[BUTTON_1_ID].p_port->IDR & BIT_POS_TO_MASK(buttons_arr[BUTTON_1_ID].pin)){
-            buttons_arr[BUTTON_1_ID].flag_pressed = false;
-        }else{
-            buttons_arr[BUTTON_1_ID].flag_pressed = true;
-        }
-    }
-
-       /* ISR button 2*/
-    if (EXTI->PR & BIT_POS_TO_MASK(BUTTON_2_PIN))
-    {    
-        EXTI->PR |= BIT_POS_TO_MASK(buttons_arr[BUTTON_2_ID].pin);
-        if(buttons_arr[BUTTON_2_ID].p_port->IDR & BIT_POS_TO_MASK(buttons_arr[BUTTON_2_ID].pin)){
-            buttons_arr[BUTTON_2_ID].flag_pressed = false;
-        }else{
-            buttons_arr[BUTTON_2_ID].flag_pressed = true;
-        }
-    }
-    
-}
-
-void EXTI1_IRQHandler()
-{
-    port_system_systick_resume();
-    EXTI->PR |= BIT_POS_TO_MASK(buttons_arr[BUTTON_3_ID].pin);
-    if(buttons_arr[BUTTON_3_ID].p_port->IDR & BIT_POS_TO_MASK(buttons_arr[BUTTON_3_ID].pin)){
-        buttons_arr[BUTTON_3_ID].flag_pressed = false;
+    EXTI->PR |= BIT_POS_TO_MASK(buttons_arr[BUTTON_0_ID].pin);
+    if(buttons_arr[BUTTON_0_ID].p_port->IDR & BIT_POS_TO_MASK(buttons_arr[BUTTON_0_ID].pin)){
+        buttons_arr[BUTTON_0_ID].flag_pressed = true;
     }else{
-        buttons_arr[BUTTON_3_ID].flag_pressed = true;
+        buttons_arr[BUTTON_0_ID].flag_pressed = false;
     }
 }

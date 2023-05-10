@@ -118,7 +118,9 @@ LIBS += -lc -lm -lnosys
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBS) 
 
 LDMIDDLEWARE = $(PORT)/$(PLATFORM)/middlewares/ST/STM32_Audio/Addons/PDM/Lib
-LDFLAGS += -L$(LDMIDDLEWARE) -lPDMFilter_CM4_GCC_wc16
+LDFLAGS += -L$(LDMIDDLEWARE) -lPDMFilter_CM4_GCC_wc32
+
+LDFLAGS += -Llib -lpicovoice
 
 bin: $(OUTPUT)/$(TARGET)$(EXT) $(OUTPUT)/$(TARGET).hex $(OUTPUT)/$(TARGET).bin
 

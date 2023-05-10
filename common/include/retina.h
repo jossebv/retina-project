@@ -28,8 +28,10 @@
 #include "fsm_rx.h"
 
 /* Versions and peripherals */
-#define VERSION 5
+#define VERSION 4
 #define LCD_CONNECTED true
+#define PICOVOICE_ACTIVE true
+
 
 
 #endif /* RETINA_H_ */

@@ -18,6 +18,8 @@
 /* Other includes */
 #include "fsm.h"
 #include "port_lcd.h"
+#include "port_rgb.h"
+#include "port_system.h"
 
 /* Function prototypes and explanation ---------------------------------------*/
 /**
@@ -36,7 +38,7 @@
  * @param p_fsm_tx Infrared transmitter FSM
  * @return fsm_t* 
  */
-fsm_t *fsm_retina_new(fsm_t *p_fsm_button, uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx);
+fsm_t *fsm_retina_new(fsm_t *p_fsm_button, uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx, uint8_t rgb_id);
 
 /**
  * @brief Initialize the infrared transmitter FSM
@@ -48,7 +50,7 @@ fsm_t *fsm_retina_new(fsm_t *p_fsm_button, uint32_t button_press_time, fsm_t *p_
  * @param button_press_time_ms Duration in ms of the button press to change between transmitter and receiver modes.
  * @param p_fms_tx Pointer to an fsm_t struct that contains an fsm_tx_t
  */
-void fsm_retina_init(fsm_t *p_this, fsm_t *p_fsm_button, uint32_t button_press_time_ms, fsm_t *p_fms_tx, fsm_t *p_fsm_rx);
+void fsm_retina_init(fsm_t *p_this, fsm_t *p_fsm_button, uint32_t button_press_time_ms, fsm_t *p_fms_tx, fsm_t *p_fsm_rx, uint8_t rgb_id);
 
 #endif
 

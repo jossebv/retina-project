@@ -125,7 +125,7 @@ $(OUTPUT):
 	mkdir $@
 
 $(OUTPUT)/$(TARGET)$(EXT): $(OBJECTS) Makefile
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@  -Wl,--gc-sections 
 	$(SZ) $@
 
 #######################################

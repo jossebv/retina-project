@@ -98,6 +98,56 @@
 				"PLATFORM=nucleo_stm32f446re"
 			],
 			"problemMatcher": []
-		}
+		},
+		{
+			"label": "Build NUCLEO_STM32F411E",
+			"options": {
+				"cwd": "${workspaceRoot}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"linux": {
+				"command": "make"
+			},
+			"osx": {
+				"command": "make"
+			},
+			"windows": {
+				"command": "mingw32-make"
+			},
+			"args": [
+				"PLATFORM=nucleo_stm32f411e"
+			]
+		},
+		{
+			"label": "Clean & Re-Build NUCLEO_STM32F411E",
+			"dependsOn": [
+				"Clean",
+				"Build NUCLEO_STM32F411E"
+			],
+			"dependsOrder": "sequence"
+		},
+		{
+			"label": "Flash NUCLEO_STM32F411E",
+			"options": {
+				"cwd": "${workspaceRoot}"
+			},
+			"linux": {
+				"command": "make"
+			},
+			"osx": {
+				"command": "make"
+			},
+			"windows": {
+				"command": "mingw32-make"
+			},
+			"args": [
+				"flash",
+				"PLATFORM=nucleo_stm32f411e"
+			],
+			"problemMatcher": []
+		},
 	]
 }

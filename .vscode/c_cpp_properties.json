@@ -27,7 +27,7 @@
             "defines": [
                 "STM32F446xx"
             ],
-            "compilerPath": "C:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\11.3 rel1\\bin\\arm-none-eabi-gcc.exe",
+            "compilerPath": "/opt/homebrew/bin/arm-none-eabi-gcc",
             "cStandard": "gnu17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "windows-gcc-arm"
@@ -89,6 +89,36 @@
             "cStandard": "gnu17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "macos-gcc-arm"
+        },
+        {
+            "name": "macos-stm32f411e",
+            "includePath": [
+                "../../Drivers/**",
+                "${workspaceFolder}/port/nucleo_stm32f411e/include",
+                "${workspaceFolder}/common/include"
+            ],
+            "defines": [
+                "STM32F411xE"
+            ],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/opt/homebrew/bin/arm-none-eabi-gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-gcc-arm",
+            "compilerPathInCppPropertiesJson": "/opt/homebrew/bin/arm-none-eabi-gcc",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "../../drivers/stm32f411/**",
+                    "../../drivers/stm32f411/BSP/STM32F411E-Discovery",
+                    "${workspaceFolder}/port/nucleo_stm32f411e/include/",
+                    "${workspaceFolder}/common/include",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4
