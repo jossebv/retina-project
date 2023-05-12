@@ -20,13 +20,15 @@
 #define RS (pin+5)
 
 /*Typedefs*/
+
 /**
- * @brief Struct to define the HW dependencies of a lcd display
-*/
+ * @brief Struct with the port and pin to which the LCD is connected
+ * 
+ */
 typedef struct
 {
-    GPIO_TypeDef *p_port;
-    uint8_t pin;
+    GPIO_TypeDef *p_port;   /*!< Port to which the LCD is connected*/
+    uint8_t pin;    /*!< Pin to which the LCD is connected*/
 }port_lcd_t;
 
 /*Global variables*/

@@ -44,11 +44,21 @@ typedef struct
 } fsm_retina_t;
 
 /* Private functions */
+/**
+ * @brief Process the color from the code that is received
+ * 
+ * @param rgb_id Identification of the RGB LED
+ * @param code Code received
+ */
 void _process_rgb_code(uint8_t rgb_id, uint32_t code)
 {
     if (code == LIL_ON_BUTTON || code == LIL_WHITE_BUTTON)
     {
         port_rgb_set_color(rgb_id, HIGH, HIGH, HIGH);
+    }
+    else if(code == LIL_OFF_BUTTON)
+    {
+        port_rgb_set_color(rgb_id, LOW, LOW, LOW);
     }
     else if (code == LIL_RED_BUTTON)
     {

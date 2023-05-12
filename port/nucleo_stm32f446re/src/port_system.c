@@ -60,7 +60,7 @@ void SystemInit(void)
  */
 static void system_clock_config(void)
 {
-  /** Configure the main internal regulator output voltage */
+  /* Configure the main internal regulator output voltage */
   /* Power controller (PWR) */
   /* Control the main internal voltage regulator output voltage to achieve a trade-off between performance and power consumption when the device does not operate at the maximum frequency */
   PWR->CR &= ~PWR_CR_VOS; // Clean and set value

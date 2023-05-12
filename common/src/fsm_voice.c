@@ -7,7 +7,7 @@
  */
 
 #include "retina.h"
-#if(PICOVOICE_ACTIVE)
+#if (PICOVOICE_ACTIVE)
 
 /* Includes --------------------------------------------------------------------*/
 #include "fsm_voice.h"
@@ -37,20 +37,20 @@ static const char *ACCESS_KEY = "zoYqhBJY9DDHtk3FTFhZYpCp9hWRLX+F/zm7bYKUgwzgSPV
 
 static int8_t memory_buffer[MEMORY_BUFFER_SIZE] __attribute__((aligned(16)));
 
-static const float PORCUPINE_SENSITIVITY = 0.5f;    //Sensitive for wake word detection
-static const float RHINO_SENSITIVITY = 0.5f;        //Sensitive for intent detection
-static const float RHINO_ENDPOINT_DURATION_SEC = 1.0f;  //Delay between speak and intent processing
+static const float PORCUPINE_SENSITIVITY = 0.5f;       // Sensitive for wake word detection
+static const float RHINO_SENSITIVITY = 0.5f;           // Sensitive for intent detection
+static const float RHINO_ENDPOINT_DURATION_SEC = 1.0f; // Delay between speak and intent processing
 static const bool RHINO_REQUIRE_ENDPOINT = true;
 
-pv_inference_t *p_inference; //Pointer to the inference proccesed object
-bool isUnderstood; // Boolean to confirm that the inference is understood
+pv_inference_t *p_inference; // Pointer to the inference proccesed object
+bool isUnderstood;           // Boolean to confirm that the inference is understood
 
 ////////////////////////////////////////////////
 /* Enums */
 ////////////////////////////////////////////////
 /**
  * @brief States of the voice FSM
- * 
+ *
  */
 enum
 {
@@ -63,7 +63,7 @@ enum
 
 /**
  * @brief Infinite loop called by the picovoice object when it fails.
- * 
+ *
  */
 static void error_handler(void)
 {
@@ -77,10 +77,10 @@ static void error_handler(void)
 
 /**
  * @brief Checks if the buffer has an audio frame.
- * 
+ *
  * @param p_this   Pointer to an fsm_t struct that contains an fsm_voice_t
- * @return true 
- * @return false 
+ * @return true
+ * @return false
  */
 static bool check_buffer(fsm_t *p_this)
 {
@@ -93,14 +93,14 @@ static bool check_buffer(fsm_t *p_this)
 
 /**
  * @brief Checks if the picovoice intent was understood.
- * 
+ *
  * This function is necessary since to process the intent we need to acces to the transmitter, hence we need the fsm_t.
- * 
- * The picovoice object calls the inference_callback, which gives us the inference object. From there is 
- * 
- * @param p_this 
- * @return true 
- * @return false 
+ *
+ * The picovoice object calls the inference_callback, which gives us the inference object. From there is
+ *
+ * @param p_this
+ * @return true
+ * @return false
  */
 static bool check_understood(fsm_t *p_this)
 {
@@ -111,7 +111,7 @@ static bool check_understood(fsm_t *p_this)
 ////////////////////////////////////////////////
 /**
  * @brief Process the audio buffer
- * 
+ *
  * @param p_this Pointer to an fsm_t struct that contains an fsm_voice_t.
  */
 static void do_process(fsm_t *p_this)
@@ -131,18 +131,27 @@ static void do_process(fsm_t *p_this)
 
 /**
  * @brief Executes the action that has been processed by the picovoice_inference object
- * 
+ *
  * @param p_this Pointer to an fsm_t struct that contains an fsm_voice_t
  */
 static void do_action(fsm_t *p_this)
 {
-    fsm_voice_t* p_fsm = (fsm_voice_t*) p_this;
+    fsm_voice_t *p_fsm = (fsm_voice_t *)p_this;
 
-    if (strcmp(p_inference->intent, "changeLightState") == 0)
+    if (strcmp(p_inference->intent, "cambiarEstado") == 0)
     {
-        fsm_tx_set_code(p_fsm->p_fsm_tx, LIL_ON_BUTTON);
+        if (strcmp(p_inference->values[0], "encienda") == 0)
+        {
+            port_lcd_print(0, "Encendiendo...");
+            fsm_tx_set_code(p_fsm->p_fsm_tx, MY_ON_BUTTON);
+        }
+        else 
+        {
+            port_lcd_print(0, "Apagando...");
+            fsm_tx_set_code(p_fsm->p_fsm_tx, MY_OFF_BUTTON);
+        }
     }
-    else if(strcmp(p_inference->intent, "changeColor") == 0)
+    else if (strcmp(p_inference->intent, "cambiarColor") == 0)
     {
         if (strcmp(p_inference->values[0], "rojo") == 0)
         {
@@ -158,6 +167,7 @@ static void do_action(fsm_t *p_this)
         }
     }
 
+    isUnderstood = false;
     pv_inference_delete(p_inference);
 }
 //////////////////////////////////////////////////
@@ -169,11 +179,12 @@ static void do_action(fsm_t *p_this)
 static void wake_word_callback(void)
 {
     BSP_LED_On(LED4);
+    port_lcd_print(0, "Dime");
 }
 
 /**
  * @brief Function that is called by the picovoice program with the inference object processed. The function makes global that object and indicates if the inference is understood
- * 
+ *
  * @param inference Struct with the intent to be done
  */
 static void inference_callback(pv_inference_t *inference)
@@ -198,8 +209,8 @@ static fsm_trans_t fsm_trans_voice[] = {
 ////////////////////////////////////////////////
 /**
  * @brief Inits the picovoice object with all the params needed
- * 
- * @param p_this 
+ *
+ * @param p_this
  */
 void picovoice_object_init(fsm_t *p_this)
 {
@@ -246,9 +257,9 @@ void picovoice_object_init(fsm_t *p_this)
 
 /**
  * @brief Initiates the FSM Voice
- * 
+ *
  * @param p_this Pointer to an fsm_t struct that contains an fsm_voice_t struct
- * @param p_fsm_tx 
+ * @param p_fsm_tx
  */
 void fsm_voice_init(fsm_t *p_this, fsm_t *p_fsm_tx)
 {

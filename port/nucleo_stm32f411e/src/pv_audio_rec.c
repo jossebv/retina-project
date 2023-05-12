@@ -8,6 +8,10 @@
     an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
     specific language governing permissions and limitations under the License.
 */
+/**
+ * @file pv_audio_rec.c
+ * @brief Portable functions to record the voice.
+*/
 
 #include <stdbool.h>
 #include <stdlib.h>

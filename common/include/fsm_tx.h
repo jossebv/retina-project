@@ -36,7 +36,7 @@
 /**
  * @brief Create a new infrared transmitter FSM
  * 
- * @param Unique infrared transmitter identifier number
+ * @param tx_id infrared transmitter identifier number
  * 
  * @return fsm_t* 
  */

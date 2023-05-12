@@ -1,3 +1,9 @@
+/**
+ * @file stm32f4xx_hal_msp.c
+ * @brief MspInit function.
+ * 
+ */
+
 #include "stm32f411e_discovery.h"
 
 void HAL_MspInit(void)

@@ -22,7 +22,7 @@
 
 
 /* Defines ------------------------------------------------------------------*/
-#define MEMORY_BUFFER_SIZE (70 * 1024)
+#define MEMORY_BUFFER_SIZE (70 * 1024)      /*!< Memory buffer size for the picovoice audio processing */
 
 /**
  * @brief Creates the FSM for controlling the voice commands

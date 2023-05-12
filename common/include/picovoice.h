@@ -8,6 +8,10 @@
     an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
     specific language governing permissions and limitations under the License.
 */
+/**
+ * @file picovoice.h
+ * @brief Header for picovoice files.
+ */
 
 #ifndef PICOVOICE_H
 #define PICOVOICE_H
@@ -21,7 +25,7 @@ extern "C"
 
 #endif
 
-#define PV_API __attribute__((visibility ("default")))
+#define PV_API __attribute__((visibility ("default")))      /*!< PV API attribute for visibility */
 
 /**
  * Audio sample rate accepted by Picovoice.

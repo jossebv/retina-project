@@ -16,6 +16,8 @@
 #define OUTPUT_MASK 0x01
 #define NO_PUPD_MASK 0x00
 
+#define LCD_INT_TIM_US 10
+
 #define ENABLE (pin+4)
 #define RS (pin+5)
 
@@ -125,7 +127,10 @@ void port_lcd_init(uint8_t lcd_id)
     {
         port_system_gpio_config(p_port, pin+i, OUTPUT_MASK, NO_PUPD_MASK);
     }
-    port_system_timer5_init(159,0); /* Enables the timer 5 to interrupt each 10 us*/
+    //MODIFICAR AQUÍ PARA QUE EL TIM5 SIGA SIENDO 10us
+    uint64_t psc = ((SystemCoreClock/2)/1000000*LCD_INT_TIM_US)/((65535+1)) - 1;
+    uint64_t arr = ((SystemCoreClock/2)*LCD_INT_TIM_US)/(1000000*(psc+1)) - 1;
+    port_system_timer5_init(arr,psc); /* Enables the timer 5 to interrupt each 10 us*/
     port_lcd_config_4pin(p_port, pin); /* Instructions to setup the display*/
     port_lcd_write_4pin(p_port, pin, CLR_DISPLAY, 0, 1);
 }

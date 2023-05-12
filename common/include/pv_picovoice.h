@@ -8,6 +8,10 @@
     an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
     specific language governing permissions and limitations under the License.
 */
+/**
+ * @file pv_picovoice.h
+ * @brief Header for picovoice files.
+ */
 
 #ifndef PV_PICOVOICE_H
 #define PV_PICOVOICE_H
@@ -39,14 +43,14 @@ extern "C" {
 typedef struct pv_picovoice pv_picovoice_t;
 
 /**
- * Container representing inferred user intent.
+ * @brief Container representing inferred user intent.
  */
 typedef struct {
-    bool is_understood;
-    const char *intent;
-    int32_t num_slots;
-    const char **slots;
-    const char **values;
+    bool is_understood;     /*!< Flag to indicate if the command has been understood */
+    const char *intent;     /*!< Intent of the command */
+    int32_t num_slots;      /*!< Number of slots of the command received */
+    const char **slots;     /*!< Array with the slots received */
+    const char **values;    /*!< Values for the slots received */
 } pv_inference_t;
 
 /**

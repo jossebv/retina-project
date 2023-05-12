@@ -34,8 +34,11 @@
  *  -When waking up by one of our system elements, being in SLEEP RX or SLEEP TX, it will always switch (check_true()) to WAIT RX or WAIT TX, respectively.
  * 
  * @param p_fsm_button User button fsm
- * @param button_press_time_ms Duration in ms of the button press to change between transmitter and receiver modes.
+ * @param button_press_time Duration in ms of the button press to change between transmitter and receiver modes.
  * @param p_fsm_tx Infrared transmitter FSM
+ * @param p_fsm_rx Pointer to a fsm_t struct that contains a fsm_rx_t.
+ * @param rgb_id Identification number for the RGB.
+ * 
  * @return fsm_t* 
  */
 fsm_t *fsm_retina_new(fsm_t *p_fsm_button, uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx, uint8_t rgb_id);
@@ -49,6 +52,8 @@ fsm_t *fsm_retina_new(fsm_t *p_fsm_button, uint32_t button_press_time, fsm_t *p_
  * @param p_fsm_button Pointer to an fsm_t struct that contains a fsm_button_t
  * @param button_press_time_ms Duration in ms of the button press to change between transmitter and receiver modes.
  * @param p_fms_tx Pointer to an fsm_t struct that contains an fsm_tx_t
+ * @param p_fsm_rx Pointer to an fms_t struct that contains an fsm_tx_t
+ * @param rgb_id Identification number for the RGB
  */
 void fsm_retina_init(fsm_t *p_this, fsm_t *p_fsm_button, uint32_t button_press_time_ms, fsm_t *p_fms_tx, fsm_t *p_fsm_rx, uint8_t rgb_id);
 

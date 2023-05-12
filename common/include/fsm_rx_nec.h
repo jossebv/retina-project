@@ -20,8 +20,8 @@
 /* Defines and enums ----------------------------------------------------------*/
 /* Defines */
 /* NEC reception macros */
-#define NEC_ADDRESS_BITS 16
-#define NEC_COMMAND_BITS 16
+#define NEC_ADDRESS_BITS 16                                  /*!< Number of bits of the NEC adress*/
+#define NEC_COMMAND_BITS 16                                  /*!< Number of bits of the NEC command*/
 #define NEC_FRAME_BITS (NEC_ADDRESS_BITS + NEC_COMMAND_BITS) /*!< Total number of bits of a NEC frame */
 #define NEC_PROLOGUE_EDGES 3                                 /*!< Number of edges of the prologue of a NEC code */
 #define NEC_EPILOGUE_EDGES 1                                 /*!< Number of edges of the epilogue of a NEC code */
@@ -29,17 +29,17 @@
 #define NEC_FRAME_EDGES 256                                  /*!< Array-size large enough to store all the edges received (the NEC code has much less edges) */
 
 /* NEC pulses and silences times (minimum and maximum tolerances) */
-#define NEC_RX_PROLOGUE_SILENCE_MIN_US 8800
-#define NEC_RX_PROLOGUE_SILENCE_MAX_US 9200
-#define NEC_RX_PROLOGUE_PULSE_MIN_US 4300
-#define NEC_RX_PROLOGUE_PULSE_MAX_US 4700
+#define NEC_RX_PROLOGUE_SILENCE_MIN_US 8800     /*!< Prologue min time of silence in us*/
+#define NEC_RX_PROLOGUE_SILENCE_MAX_US 9200     /*!< Prologue max time of silence in us*/
+#define NEC_RX_PROLOGUE_PULSE_MIN_US 4300       /*!< Prologue min time of pulse in us*/
+#define NEC_RX_PROLOGUE_PULSE_MAX_US 4700       /*!< Prologue max time of pulse in us*/
 
-#define NEC_RX_SYMBOL_SILENCE_MIN_US 400
-#define NEC_RX_SYMBOL_SILENCE_MAX_US 700
-#define NEC_RX_SYMBOL_0_PULSE_MIN_US 400
-#define NEC_RX_SYMBOL_0_PULSE_MAX_US 700
-#define NEC_RX_SYMBOL_1_PULSE_MIN_US 1500
-#define NEC_RX_SYMBOL_1_PULSE_MAX_US 1800
+#define NEC_RX_SYMBOL_SILENCE_MIN_US 400        /*!< Symbol silence min time in us */
+#define NEC_RX_SYMBOL_SILENCE_MAX_US 700        /*!< Symbol silence max time in us */
+#define NEC_RX_SYMBOL_0_PULSE_MIN_US 400        /*!< Symbol pulse 0 min time in us */
+#define NEC_RX_SYMBOL_0_PULSE_MAX_US 700        /*!< Symbol pulse 0 max time in us */
+#define NEC_RX_SYMBOL_1_PULSE_MIN_US 1500       /*!< Symbol pulse 1 min time in us */
+#define NEC_RX_SYMBOL_1_PULSE_MAX_US 1800       /*!< Symbol pulse 1 max time in us */
 
 #define NEC_RX_REPETITION_PULSE_MIN_US 1700 /*!< Minimum width of epilogue pulse at RX in microseconds */
 #define NEC_RX_REPETITION_PULSE_MAX_US 2700 /*!< Maximum width of epilogue pulse at RX in microseconds */

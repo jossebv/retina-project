@@ -25,7 +25,7 @@
 #define NUMBER_CONTROLLERS 5    /*!< Number of controllers to store*/
 #define CONTROLLERS_INITIALLY_AV 2   /*!< Number controllers initially available*/
 
-#define BUTTON_0_ID 0
+#define BUTTON_0_ID 0       /*!< Identification for button 0*/
 
 /* Function prototypes and explanation ---------------------------------------*/
 /**
@@ -39,9 +39,10 @@
  *  -While in SLEEP RX or SLEEP TX, it checks that no machine has activity, and, by means of an autotransition, it goes to sleep. These autotransitions are used to avoid staying awake by any interruption from other elements than ours, or the debugger.
  *  -When waking up by one of our system elements, being in SLEEP RX or SLEEP TX, it will always switch (check_true()) to WAIT RX or WAIT TX, respectively.
  * 
- * @param p_fsm_button User button fsm
- * @param button_press_time_ms Duration in ms of the button press to change between transmitter and receiver modes.
- * @param p_fsm_tx Infrared transmitter FSM
+ * @param button_arr Array with the pointers to fsm_button_t structs
+ * @param button_press_time Duration in ms of the button press to change between transmitter and receiver modes.
+ * @param p_fsm_tx Pointer to an fsm_t struct that contains an fsm_tx_t
+ * @param p_fsm_rx Pointer to an fsm_t struct that contains an fsm_rx_t
  * @return fsm_t* 
  */
 fsm_t *fsm_retina_new_v2(fsm_t* button_arr[], uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx);
@@ -52,9 +53,10 @@ fsm_t *fsm_retina_new_v2(fsm_t* button_arr[], uint32_t button_press_time, fsm_t 
  * This function initializes the default values of the FSM struct. On the basic version of Retina, it does not have HW (such as status LEDs, as in example); in thtat case, this fuction must call to the port to initialize the HW associated
  * 
  * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t.
- * @param p_fsm_button Pointer to an fsm_t struct that contains a fsm_button_t
+ * @param button_arr Pointer to an array with pointers to fsm_button_t structs.
  * @param button_press_time_ms Duration in ms of the button press to change between transmitter and receiver modes.
  * @param p_fms_tx Pointer to an fsm_t struct that contains an fsm_tx_t
+ * @param p_fms_rx Pointer to an fsm-t struct that contains an fsm_rx_t
  */
 void fsm_retina_init_v2(fsm_t *p_this, fsm_t* button_arr[], uint32_t button_press_time_ms, fsm_t *p_fms_tx, fsm_t *p_fsm_rx);
 

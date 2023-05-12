@@ -18,11 +18,11 @@
 typedef struct
 {
     fsm_t f;    /*!< Button FSM */
-    uint32_t debounce_time; /* !< Button debounce time*/
-    uint32_t next_timeout;  /* !< Next timeout for the anti-debounce in ms*/
-    uint32_t tick_pressed; /* !< Number of ticks when the button was pressed*/
-    uint32_t duration;  /* !< How much time the button has been pressed*/
-    uint32_t button_id; /* !< Button ID. Must be unique*/
+    uint32_t debounce_time; /*!< Button debounce time*/
+    uint32_t next_timeout;  /*!< Next timeout for the anti-debounce in ms*/
+    uint32_t tick_pressed; /*!< Number of ticks when the button was pressed*/
+    uint32_t duration;  /*!< How much time the button has been pressed*/
+    uint32_t button_id; /*!< Button ID. Must be unique*/
 }fsm_button_t;
 /* Defines and enums ----------------------------------------------------------*/
 
@@ -109,6 +109,10 @@ static void do_store_tick_pressed(fsm_t *p_this)
     p_button->next_timeout = (tick+p_button->debounce_time);
 }
 
+/**
+ * @brief Transition table for the button FSM
+ * 
+ */
 static fsm_trans_t fsm_trans_button[] = {
     {BUTTON_RELEASED, check_button_pressed, BUTTON_PRESSED_WAIT, do_store_tick_pressed},
     {BUTTON_PRESSED_WAIT, check_timeout, BUTTON_PRESSED, NULL},

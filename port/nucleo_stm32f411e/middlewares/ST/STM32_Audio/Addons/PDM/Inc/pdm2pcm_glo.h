@@ -61,6 +61,10 @@
 #define PDM2PCM_INTERNAL_MEMORY_SIZE 16
 
 /* Exported types ------------------------------------------------------------*/
+/**
+ * @brief Struct to handle the PDM filter, which makes the conversion of the audio input into PCM.
+ * 
+ */
 typedef struct{
   uint16_t bit_order;
   uint16_t endianness;
@@ -70,6 +74,10 @@ typedef struct{
   uint32_t pInternalMemory[PDM2PCM_INTERNAL_MEMORY_SIZE];
 }PDM_Filter_Handler_t;
 
+/**
+ * @brief Struct to config the PDM filter, which makes the conversion of the audio input into PCM.
+ * 
+ */
 typedef struct{
   uint16_t decimation_factor;
   uint16_t output_samples_number;
