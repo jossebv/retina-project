@@ -28,8 +28,8 @@
 #include "fsm_rx.h"
 
 /* Versions and peripherals */
-#define VERSION 4               /*!< Version we are running of retina*/
-#define LCD_CONNECTED false     /*!< Indicates if there is a LCD connected*/
+#define VERSION 5               /*!< Version we are running of retina*/
+#define LCD_CONNECTED true     /*!< Indicates if there is a LCD connected*/
 #define PICOVOICE_ACTIVE true   /*!< Indicates if the we are using voice recognition*/
 
 

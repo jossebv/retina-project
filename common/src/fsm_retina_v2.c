@@ -14,11 +14,11 @@
 #include "fsm_retina_v2.h"
 
 /* Global variables -----------------------------------------------------------*/
-uint32_t tx_1_commands[NUMBER_BUTTONS] = {CHANGE_BUTTON, MY_RED_BUTTON};   /*!< First controller*/
-uint32_t tx_2_commands[NUMBER_BUTTONS] = {CHANGE_BUTTON, MY_GREEN_BUTTON}; /*!< Second controller*/
-uint32_t tx_3_commands[NUMBER_BUTTONS];                                    /*!< Third controller*/
-uint32_t tx_4_commands[NUMBER_BUTTONS];                                    /*!< Fourth controller*/
-uint32_t tx_5_commands[NUMBER_BUTTONS];                                    /*!< Fith controller*/
+uint32_t tx_1_commands[NUMBER_BUTTONS] = {ON_BUTTON, CHANGE_BUTTON, MY_RED_BUTTON};   /*!< First controller*/
+uint32_t tx_2_commands[NUMBER_BUTTONS] = {ON_BUTTON, CHANGE_BUTTON, MY_GREEN_BUTTON}; /*!< Second controller*/
+uint32_t tx_3_commands[NUMBER_BUTTONS];                                               /*!< Third controller*/
+uint32_t tx_4_commands[NUMBER_BUTTONS];                                               /*!< Fourth controller*/
+uint32_t tx_5_commands[NUMBER_BUTTONS];                                               /*!< Fith controller*/
 
 uint32_t *commands_table[NUMBER_CONTROLLERS] = {tx_1_commands, tx_2_commands, tx_3_commands, tx_4_commands, tx_5_commands}; /*!< Table with the directions of the different commands arrays*/
 
@@ -27,10 +27,11 @@ uint32_t *commands_table[NUMBER_CONTROLLERS] = {tx_1_commands, tx_2_commands, tx
 /* Enums */
 enum
 {
-    WAIT_TX = 0, /*!< **Single state in Version 2**. State to wait in transmission mode */
-    WAIT_RX,    /*!< State to wait in receiver mode*/
-    SLEEP_TX, /*!< State to be sleeping in transmission mode*/
-    SLEEP_RX, /*!< State to be sleeping in reception mode*/
+    OFF_RETINA = 0, /*!< State off of the retina board*/
+    WAIT_TX,        /*!< State to wait in transmission mode */
+    WAIT_RX,        /*!< State to wait in receiver mode*/
+    SLEEP_TX,       /*!< State to be sleeping in transmission mode*/
+    SLEEP_RX,       /*!< State to be sleeping in reception mode*/
 };
 
 /* Typedefs --------------------------------------------------------------------*/
@@ -50,6 +51,9 @@ typedef struct
     uint8_t available_controllers;         /*!< Gives the number of controllers available to work*/
     uint32_t rx_code;                      /*!< Stores the code received*/
     uint8_t rx_index;                      /*!< Index of which button are we programming*/
+    uint8_t rgb_id;                        /*!< Identifier of the RGB LED*/
+    uint32_t color_mem;
+    bool rgb_state;
 } fsm_retina_t;
 
 /* Private functions*/
@@ -80,7 +84,7 @@ void _load_commands(fsm_t *p_this, uint32_t *commands)
 static bool check_short_pressed_v2(fsm_t *p_this)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
-    for (uint8_t i = 1; i < NUMBER_BUTTONS; i++)
+    for (uint8_t i = 2; i < NUMBER_BUTTONS; i++)
     {
         uint32_t duration = fsm_button_get_duration(p_fsm->button_arr[i]);
         if (duration > 0 && duration < p_fsm->long_button_press_ms)
@@ -102,7 +106,7 @@ static bool check_short_pressed_v2(fsm_t *p_this)
 static bool check_long_pressed(fsm_t *p_this)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
-    uint32_t duration = fsm_button_get_duration(p_fsm->button_arr[0]);
+    uint32_t duration = fsm_button_get_duration(p_fsm->button_arr[1]);
     return (duration > p_fsm->long_button_press_ms && duration != 0);
 }
 
@@ -116,9 +120,17 @@ static bool check_long_pressed(fsm_t *p_this)
 static bool check_change_controller(fsm_t *p_this)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
-    uint32_t duration = fsm_button_get_duration(p_fsm->button_arr[0]);
+    uint32_t duration = fsm_button_get_duration(p_fsm->button_arr[1]);
 
     return (duration > 0 && duration < p_fsm->long_button_press_ms);
+}
+
+static bool check_on_button(fsm_t *p_this)
+{
+    fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
+    uint32_t duration = fsm_button_get_duration(p_fsm->button_arr[0]);
+
+    return (duration > 0);
 }
 
 /**
@@ -170,15 +182,15 @@ static bool check_repetition(fsm_t *p_this)
 
 /**
  * @brief Checks for every button if the fsm is doing any activity
- * 
+ *
  * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
- * 
+ *
  * @return true
  * @return false
-*/
+ */
 bool check_buttons_array_activity(fsm_t *p_this)
 {
-    fsm_retina_t *p_fsm = (fsm_retina_t*) p_this;
+    fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
 
     for (uint8_t i = 0; i < NUMBER_BUTTONS; i++)
     {
@@ -220,6 +232,8 @@ static bool check_no_activity(fsm_t *p_this)
 ///////////////////////////////////////////////////////
 /* State machine output or action functions */
 ///////////////////////////////////////////////////////
+
+
 /**
  * @brief Transmit the next code stored in memory after a short button press.
  *
@@ -236,7 +250,7 @@ static void do_send_next_msg_v2(fsm_t *p_this)
 
     /*Debug for know which button is pressed*/
     char bufer[16];
-    sprintf(bufer, "M:%d - B:%d", p_fsm->actual_controller + 1, button_id);
+    sprintf(bufer, "M:%d - B:%d", p_fsm->actual_controller + 1, button_id-1);
     port_lcd_print(0, bufer);
 }
 
@@ -254,7 +268,7 @@ static void do_change_controller(fsm_t *p_this)
     p_fsm->actual_controller = next_controller;
 
     _load_commands(p_this, commands_table[next_controller]);
-    fsm_button_reset_duration(p_fsm->button_arr[BUTTON_0_ID]);
+    fsm_button_reset_duration(p_fsm->button_arr[1]);
 
     /*LCD debug*/
 
@@ -274,9 +288,9 @@ static void do_tx_off_rx_on(fsm_t *p_this)
 
     fsm_rx_set_rx_status(p_fsm->p_fsm_rx, true);
 
-    fsm_button_reset_duration(p_fsm->button_arr[0]);
+    fsm_button_reset_duration(p_fsm->button_arr[1]);
 
-    p_fsm->rx_index = 1;
+    p_fsm->rx_index = 2;
 
     port_lcd_print(0, "Modo RX");
 }
@@ -294,7 +308,7 @@ static void do_rx_off_tx_on(fsm_t *p_this)
 
     fsm_rx_set_rx_status(p_fsm->p_fsm_rx, false);
 
-    fsm_button_reset_duration(p_fsm->button_arr[0]);
+    fsm_button_reset_duration(p_fsm->button_arr[1]);
 
     // p_fsm->available_controllers++;
 
@@ -312,8 +326,7 @@ static void do_execute_code(fsm_t *p_this)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
 
-    // ACCION AL RECIVIR
-
+    // ACCION AL RECIBIR
     uint8_t rx_index = p_fsm->rx_index;
     if (rx_index < NUMBER_BUTTONS)
     {
@@ -324,6 +337,7 @@ static void do_execute_code(fsm_t *p_this)
     char string[16];
     sprintf(string, "0x%08lX", p_fsm->rx_code);
     port_lcd_print(0, string);
+    port_rgb_success(p_fsm->rgb_id);
 
     if (rx_index == NUMBER_BUTTONS - 1)
     {
@@ -332,7 +346,7 @@ static void do_execute_code(fsm_t *p_this)
         p_this->current_state = WAIT_TX;
     }
     p_fsm->rx_index++;
-    // FIN ACCION RECIVIR
+    // FIN ACCION RECIBIR
 
     fsm_rx_reset_code(p_fsm->p_fsm_rx);
 }
@@ -365,17 +379,37 @@ static void do_execute_repetition(fsm_t *p_this)
 
 /**
  * @brief  Start the low power mode
- * 
+ *
  * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
-*/
+ */
 static void do_sleep(fsm_t *p_this)
 {
     port_system_sleep();
 }
 
+static void do_turn_on(fsm_t *p_this)
+{
+    fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
+
+    fsm_button_reset_duration(p_fsm->button_arr[0]);
+    do_rx_off_tx_on(p_this);
+}
+
+static void do_turn_off(fsm_t *p_this)
+{
+    fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
+
+    fsm_button_reset_duration(p_fsm->button_arr[0]);
+    do_rx_off_tx_on(p_this);
+    port_lcd_print(0, "Sistema apagado");
+    do_sleep(p_this);
+}
 /*Transition table*/
 
 static fsm_trans_t fsm_trans_retina[] = {
+    {OFF_RETINA, check_on_button, WAIT_TX, do_turn_on},
+    {WAIT_TX, check_on_button, OFF_RETINA, do_turn_off},
+    {WAIT_TX, check_on_button, OFF_RETINA, do_turn_off},
     {WAIT_TX, check_short_pressed_v2, WAIT_TX, do_send_next_msg_v2},
     {WAIT_TX, check_change_controller, WAIT_TX, do_change_controller},
     {WAIT_TX, check_no_activity, SLEEP_TX, do_sleep},
@@ -393,14 +427,14 @@ static fsm_trans_t fsm_trans_retina[] = {
 
 /* Other auxiliary functions */
 
-fsm_t *fsm_retina_new_v2(fsm_t *button_arr[], uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx)
+fsm_t *fsm_retina_new_v2(fsm_t *button_arr[], uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx, uint8_t rgb_id)
 {
     fsm_t *p_fsm = malloc(sizeof(fsm_retina_t)); /* Do malloc to reserve memory of all other FSM elements, although it is interpreted as fsm_t (the first element of the structure) */
-    fsm_retina_init_v2(p_fsm, button_arr, button_press_time, p_fsm_tx, p_fsm_rx);
+    fsm_retina_init_v2(p_fsm, button_arr, button_press_time, p_fsm_tx, p_fsm_rx, rgb_id);
     return p_fsm;
 }
 
-void fsm_retina_init_v2(fsm_t *p_this, fsm_t *button_arr[], uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx)
+void fsm_retina_init_v2(fsm_t *p_this, fsm_t *button_arr[], uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx, uint8_t rgb_id)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
     fsm_init(p_this, fsm_trans_retina);
@@ -416,10 +450,13 @@ void fsm_retina_init_v2(fsm_t *p_this, fsm_t *button_arr[], uint32_t button_pres
     p_fsm->actual_controller = 0;
     p_fsm->available_controllers = CONTROLLERS_INITIALLY_AV;
     p_fsm->rx_code = 0;
+    p_fsm->rgb_id = rgb_id;
+
+    port_rgb_init(rgb_id);
 
     /*Codes array*/
     _load_commands(p_this, commands_table[p_fsm->actual_controller]);
 
     /*Display*/
-    port_lcd_print(0, "Mando: 1");
+    port_lcd_print(0, "Sistema apagado");
 }

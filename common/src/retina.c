@@ -63,12 +63,12 @@ int main(void)
     }
     else
     {
-        p_fsm_retina = fsm_retina_new_v2(button_arr, 1000, p_fsm_tx, p_fsm_rx);
+        p_fsm_retina = fsm_retina_new_v2(button_arr, 1000, p_fsm_tx, p_fsm_rx, 0);
     }
 
     while (1)
     {
-        for (uint8_t i = 0; i < 1; i++)
+        for (uint8_t i = 0; i < NUMBER_BUTTONS; i++)
         {
             fsm_fire(button_arr[i]);
         }
@@ -84,8 +84,10 @@ int main(void)
         {
             fsm_fire(p_fsm_voice);
         }
-
-        fsm_fire(p_fsm_retina);
+        else
+        {
+            fsm_fire(p_fsm_retina);
+        }
     }
 
     /*Destroy de fsm*/

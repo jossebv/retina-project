@@ -43,5 +43,14 @@ However, in the basic implementation of this function we are only using the valu
  */
 void port_rgb_set_color(uint8_t rgb_id, uint8_t r, uint8_t g, uint8_t b);
 
+/**
+ * @brief Function to blink the led
+ * 
+ * Informs to the user that the operation has been a success
+ * 
+ * @param rgb_id 
+ */
+void port_rgb_success(uint8_t rgb_id);
+
 
 #endif

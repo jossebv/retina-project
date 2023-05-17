@@ -46,6 +46,19 @@ void port_rgb_set_color (uint8_t rgb_id, uint8_t r, uint8_t g, uint8_t b)
     port_system_gpio_write(p_rgb_hw.p_port_blue, p_rgb_hw.pin_blue, b>0);
 }
 
+void port_rgb_success(uint8_t rgb_id)
+{
+    port_rgb_hw_t p_rgb_hw = rgb_arr[rgb_id];
+
+    for (uint8_t i = 0; i < 3; i++)
+    {
+        port_system_gpio_write(p_rgb_hw.p_port_green, p_rgb_hw.pin_green, true);
+        port_system_delay_ms(100);
+        port_system_gpio_write(p_rgb_hw.p_port_green, p_rgb_hw.pin_green, false);
+        port_system_delay_ms(100);
+    }
+}
+
 void port_rgb_init(uint8_t rgb_id)
 {
     port_rgb_hw_t p_rgb_hw = rgb_arr[rgb_id];

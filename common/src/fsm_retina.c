@@ -17,10 +17,14 @@
 /* Defines */
 #define COMMANDS_MEMORY_SIZE 3 /*!< Number of NEC commands stored in the memory of the system Retina */
 
+/* Global variables */
+uint32_t color_mem = 0x0; /*!< Memory space with the last color when turned off the leds */
+bool rgb_state = false;
+
 /* Enums */
 enum
 {
-    WAIT_TX = 0, /*!< **Single state in Version 2**. State to wait in transmission mode */
+    WAIT_TX = 0, /*!< State to wait in transmission mode */
     WAIT_RX,     /*!< State to wait in receiver mode*/
     SLEEP_TX,    /*!< State to be sleeping in transmission mode*/
     SLEEP_RX,    /*!< State to be sleeping in reception mode*/
@@ -46,39 +50,55 @@ typedef struct
 /* Private functions */
 /**
  * @brief Process the color from the code that is received
- * 
+ *
  * @param rgb_id Identification of the RGB LED
  * @param code Code received
  */
 void _process_rgb_code(uint8_t rgb_id, uint32_t code)
-{
-    if (code == LIL_ON_BUTTON || code == LIL_WHITE_BUTTON)
+{   
+    if (code == MY_ON_BUTTON)
     {
-        port_rgb_set_color(rgb_id, HIGH, HIGH, HIGH);
+        if (rgb_state)
+        {
+            port_rgb_set_color(rgb_id, LOW, LOW, LOW);
+            rgb_state = !rgb_state;
+            return;
+        }
+
+        if (color_mem == 0x0)
+        {
+            port_rgb_set_color(rgb_id, HIGH, HIGH, HIGH);
+        }
+        else
+        {
+            _process_rgb_code(rgb_id, color_mem);
+        }
+        rgb_state = !rgb_state;
+        return;
     }
-    else if(code == LIL_OFF_BUTTON)
+    else if (code == MY_OFF_BUTTON)
     {
         port_rgb_set_color(rgb_id, LOW, LOW, LOW);
+        return;
     }
-    else if (code == LIL_RED_BUTTON)
+
+    if (code == MY_RED_BUTTON)
     {
         port_rgb_set_color(rgb_id, HIGH, LOW, LOW);
     }
-    else if (code == LIL_GREEN_BUTTON)
+    else if (code == MY_GREEN_BUTTON)
     {
         port_rgb_set_color(rgb_id, LOW, HIGH, LOW);
     }
-    else if (code == LIL_BLUE_BUTTON)
+    else if (code == MY_BLUE_BUTTON)
     {
         port_rgb_set_color(rgb_id, LOW, LOW, HIGH);
     }
-    else if (code == LIL_OFF_BUTTON)
+    else if (code == LIL_WHITE_BUTTON)
     {
-        port_rgb_set_color(rgb_id, LOW, LOW, LOW);
+        port_rgb_set_color(rgb_id, HIGH, HIGH, HIGH);
     }
-    
-    
-    
+    color_mem = code;
 }
 
 /* State machine input or transition functions */
@@ -155,6 +175,32 @@ static bool check_error(fsm_t *p_this)
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
 
     return fsm_rx_get_error_code(p_fsm->p_fsm_rx);
+}
+
+/**
+ * @brief Checks if any sub fsm is having any activity
+ *
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina struct
+ * @return true
+ * @return false
+ */
+bool check_activity(fsm_t *p_this)
+{
+    fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
+
+    return (fsm_button_check_activity(p_fsm->p_fsm_button) || fsm_tx_check_activity(p_fsm->p_fsm_tx) || fsm_rx_check_activity(p_fsm->p_fsm_rx));
+}
+
+/**
+ * @brief Returns the oposite of check_activity function
+ *
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina struct
+ * @return true
+ * @return false
+ */
+bool check_no_activity(fsm_t *p_this)
+{
+    return !check_activity(p_this);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -263,15 +309,31 @@ static void do_discard_rx_and_reset(fsm_t *p_this)
     fsm_rx_reset_code(p_fsm->p_fsm_rx);
 }
 
+/**
+ * @brief Start the low power mode.
+ *
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
+ */
+void do_sleep(fsm_t *p_this)
+{
+    port_system_sleep();
+}
+
 /*Transition table*/
 
 static fsm_trans_t fsm_trans_retina[] = {
     {WAIT_TX, check_short_pressed, WAIT_TX, do_send_next_msg},
     {WAIT_TX, check_long_pressed, WAIT_RX, do_tx_off_rx_on},
+    {WAIT_TX, check_no_activity, SLEEP_TX, do_sleep},
+    {SLEEP_TX, check_no_activity, SLEEP_TX, do_sleep},
+    {SLEEP_TX, check_activity, WAIT_TX, NULL},
     {WAIT_RX, check_code, WAIT_RX, do_execute_code},
     {WAIT_RX, check_repetition, WAIT_RX, do_execute_repetition},
     {WAIT_RX, check_error, WAIT_RX, do_discard_rx_and_reset},
     {WAIT_RX, check_long_pressed, WAIT_TX, do_rx_off_tx_on},
+    {WAIT_RX, check_no_activity, SLEEP_RX, do_sleep},
+    {SLEEP_RX, check_no_activity, SLEEP_RX, do_sleep},
+    {SLEEP_RX, check_activity, WAIT_RX, NULL},
     {-1, NULL, -1, NULL}};
 
 /* Other auxiliary functions */

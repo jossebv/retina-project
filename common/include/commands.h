@@ -12,6 +12,9 @@
 /* Defines and enums ----------------------------------------------------------*/
 /* Defines */
 
+#define ON_BUTTON 0x00                  /*!< Define to use on commands storages to indicate the on button */
+#define CHANGE_BUTTON   0x00            /*!< Define to use on commands storages to indicate the change button*/
+
 /* Device: Liluco IR remote */
 /* The Liluco IR remote and receiver work on NEC protocol */
 #define LIL_ON_BUTTON 0x00F7C03F    /*!< Liluco IR remote command for button ON */

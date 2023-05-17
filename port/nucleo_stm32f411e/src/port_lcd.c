@@ -128,7 +128,7 @@ void port_lcd_init(uint8_t lcd_id)
         port_system_gpio_config(p_port, pin+i, OUTPUT_MASK, NO_PUPD_MASK);
     }
     //MODIFICAR AQUÍ PARA QUE EL TIM5 SIGA SIENDO 10us
-    uint64_t psc = ((SystemCoreClock/2)/1000000*LCD_INT_TIM_US)/((65535+1)) - 1;
+    uint64_t psc = ceil(((SystemCoreClock/2)/1000000)*LCD_INT_TIM_US)/((65535+1)) - 1;
     uint64_t arr = ((SystemCoreClock/2)*LCD_INT_TIM_US)/(1000000*(psc+1)) - 1;
     port_system_timer5_init(arr,psc); /* Enables the timer 5 to interrupt each 10 us*/
     port_lcd_config_4pin(p_port, pin); /* Instructions to setup the display*/

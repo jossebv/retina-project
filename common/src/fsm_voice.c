@@ -18,6 +18,7 @@
 #include "stm32f411e_discovery.h"
 
 #include "commands.h"
+#include "port_buzzer.h"
 
 /* Typedefs --------------------------------------------------------------------*/
 /**
@@ -179,6 +180,7 @@ static void do_action(fsm_t *p_this)
 static void wake_word_callback(void)
 {
     BSP_LED_On(LED4);
+    port_buzzer_play(0);
     port_lcd_print(0, "Dime");
 }
 
@@ -268,6 +270,7 @@ void fsm_voice_init(fsm_t *p_this, fsm_t *p_fsm_tx)
     fsm_init(p_this, fsm_trans_voice);
 
     picovoice_object_init(p_this);
+    port_buzzer_init(0);
     p_fsm->p_fsm_tx = p_fsm_tx;
 }
 

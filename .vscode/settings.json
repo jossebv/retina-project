@@ -17,5 +17,6 @@
         "commands.h": "c",
         "fsm_retina.h": "c",
         "fsm_button.h": "c"
-    }
+    },
+    "cortex-debug.variableUseNaturalFormat": true
 }

@@ -21,7 +21,7 @@
 
 
 /* Defines */
-#define NUMBER_BUTTONS 2    /*!< Number of buttons of the controller*/
+#define NUMBER_BUTTONS 3    /*!< Number of buttons of the controller (3 min: on_button, change_button, and generic button)*/
 #define NUMBER_CONTROLLERS 5    /*!< Number of controllers to store*/
 #define CONTROLLERS_INITIALLY_AV 2   /*!< Number controllers initially available*/
 
@@ -43,9 +43,10 @@
  * @param button_press_time Duration in ms of the button press to change between transmitter and receiver modes.
  * @param p_fsm_tx Pointer to an fsm_t struct that contains an fsm_tx_t
  * @param p_fsm_rx Pointer to an fsm_t struct that contains an fsm_rx_t
+ * @param rgb_id Identifier number of the board rgb
  * @return fsm_t* 
  */
-fsm_t *fsm_retina_new_v2(fsm_t* button_arr[], uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx);
+fsm_t *fsm_retina_new_v2(fsm_t* button_arr[], uint32_t button_press_time, fsm_t *p_fsm_tx, fsm_t *p_fsm_rx, uint8_t rgb_id);
 
 /**
  * @brief Initialize the infrared transmitter FSM
@@ -57,8 +58,9 @@ fsm_t *fsm_retina_new_v2(fsm_t* button_arr[], uint32_t button_press_time, fsm_t 
  * @param button_press_time_ms Duration in ms of the button press to change between transmitter and receiver modes.
  * @param p_fms_tx Pointer to an fsm_t struct that contains an fsm_tx_t
  * @param p_fms_rx Pointer to an fsm-t struct that contains an fsm_rx_t
+ * @param rgb_id Identifier number of the board rgb
  */
-void fsm_retina_init_v2(fsm_t *p_this, fsm_t* button_arr[], uint32_t button_press_time_ms, fsm_t *p_fms_tx, fsm_t *p_fsm_rx);
+void fsm_retina_init_v2(fsm_t *p_this, fsm_t* button_arr[], uint32_t button_press_time_ms, fsm_t *p_fms_tx, fsm_t *p_fsm_rx, uint8_t rgb_id);
 
 #endif
 

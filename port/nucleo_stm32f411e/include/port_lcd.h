@@ -13,6 +13,7 @@
 /* Standard C includes */
 #include <stdint.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "port_system.h"
 #include "retina.h"
