@@ -61,7 +61,7 @@ typedef struct {
 PV_API void pv_inference_delete(pv_inference_t *inference);
 
 /**
- * Constructor.
+ * @brief Constructor.
  *
  * @param access_key AccessKey obtained from Picovoice Console (https://console.picovoice.ai/).
  * @param memory_size Memory size in bytes.
@@ -113,7 +113,7 @@ PV_API pv_status_t pv_picovoice_init(
         pv_picovoice_t **object);
 
 /**
- * Destructor.
+ * @brief Destructor.
  *
  * @param object Picovoice object.
  */

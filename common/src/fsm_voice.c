@@ -77,7 +77,7 @@ static void error_handler(void)
 ////////////////////////////////////////////////
 
 /**
- * @brief Checks if the buffer has an audio frame.
+ * @brief Checks if the buffer has an audio frame to procces.
  *
  * @param p_this   Pointer to an fsm_t struct that contains an fsm_voice_t
  * @return true
@@ -111,7 +111,9 @@ static bool check_understood(fsm_t *p_this)
 /* State machine output or action functions */
 ////////////////////////////////////////////////
 /**
- * @brief Process the audio buffer
+ * @brief Process the audio buffer received
+ * 
+ * The function calls to the pv_picovoice_proccess function
  *
  * @param p_this Pointer to an fsm_t struct that contains an fsm_voice_t.
  */
@@ -141,30 +143,65 @@ static void do_action(fsm_t *p_this)
 
     if (strcmp(p_inference->intent, "cambiarEstado") == 0)
     {
-        if (strcmp(p_inference->values[0], "encienda") == 0)
+        if (strcmp(p_inference->values[0], "enciende") == 0)
         {
             port_lcd_print(0, "Encendiendo...");
-            fsm_tx_set_code(p_fsm->p_fsm_tx, MY_ON_BUTTON);
+            if (p_inference->num_slots == 2 && strcmp(p_inference->values[1], "placa") == 0)
+            {
+                port_rgb_set_color(0, HIGH, HIGH, HIGH);
+            }
+            else
+            {
+                fsm_tx_set_code(p_fsm->p_fsm_tx, MY_ON_BUTTON);
+            }
         }
         else 
         {
             port_lcd_print(0, "Apagando...");
-            fsm_tx_set_code(p_fsm->p_fsm_tx, MY_OFF_BUTTON);
+            if (p_inference->num_slots == 2 && strcmp(p_inference->values[1], "placa") == 0)
+            {
+                port_rgb_set_color(0, LOW, LOW, LOW);
+            }
+            else
+            {
+                fsm_tx_set_code(p_fsm->p_fsm_tx, MY_OFF_BUTTON);
+            }
         }
     }
     else if (strcmp(p_inference->intent, "cambiarColor") == 0)
     {
-        if (strcmp(p_inference->values[0], "rojo") == 0)
+        if (strcmp(p_inference->values[0], "rojo") == 0 || (p_inference->num_slots == 2 && strcmp(p_inference->values[1], "rojo") == 0))
         {
-            fsm_tx_set_code(p_fsm->p_fsm_tx, MY_RED_BUTTON);
+            if (p_inference->num_slots == 2 && strcmp(p_inference->values[0], "placa") == 0)
+            {
+                port_rgb_set_color(0, HIGH, LOW, LOW);
+            }
+            else
+            {
+                fsm_tx_set_code(p_fsm->p_fsm_tx, MY_RED_BUTTON);
+            }
         }
-        if (strcmp(p_inference->values[0], "verde") == 0)
+        if (strcmp(p_inference->values[0], "verde") == 0 || (p_inference->num_slots == 2 && strcmp(p_inference->values[1], "verde") == 0))
         {
-            fsm_tx_set_code(p_fsm->p_fsm_tx, MY_GREEN_BUTTON);
+            if (p_inference->num_slots == 2 && strcmp(p_inference->values[0], "placa") == 0)
+            {
+                port_rgb_set_color(0, LOW, HIGH, HIGH);
+            }
+            else
+            {
+                fsm_tx_set_code(p_fsm->p_fsm_tx, MY_GREEN_BUTTON);
+            }
         }
-        if (strcmp(p_inference->values[0], "azul") == 0)
+        if (strcmp(p_inference->values[0], "azul") == 0 || (p_inference->num_slots == 2 && strcmp(p_inference->values[1], "azul") == 0))
         {
-            fsm_tx_set_code(p_fsm->p_fsm_tx, MY_BLUE_BUTTON);
+            if (p_inference->num_slots == 2 && strcmp(p_inference->values[0], "placa") == 0)
+            {
+                port_rgb_set_color(0, LOW, LOW, HIGH);
+            }
+            else
+            {
+                fsm_tx_set_code(p_fsm->p_fsm_tx, MY_BLUE_BUTTON);
+            }
         }
     }
 
