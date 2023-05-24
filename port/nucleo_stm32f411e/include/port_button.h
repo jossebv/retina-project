@@ -77,7 +77,7 @@ uint32_t port_button_get_tick();
  * 
  * This function is used when receiving an interruption caused by the button.
  * 
- * @param button_id 
+ * @param button_id Button ID. This index is used to select the element of the buttons_arr[] array
  * @return true 
  * @return false 
  */
@@ -86,7 +86,7 @@ bool* port_button_get_p_flag(uint8_t button_id);
 /**
  * @brief Handles the button interruption when happening on an external interruption handler
  * 
- * @param button_id 
+ * @param button_id Button ID. This index is used to select the element of the buttons_arr[] array
  */
 void port_button_interruption_handler(uint8_t button_id);
 

@@ -84,6 +84,11 @@ static void do_tx_start(fsm_t *p_this)
     p_fsm->code = 0x00;
 }
 
+/**
+ * @brief Transition table for the FSM_TX
+ * 
+ * \image html fsm_tx.png
+ */
 static fsm_trans_t fsm_trans_tx[] = {
     {WAIT_TX, check_tx_start, WAIT_TX, do_tx_start},
     {-1,NULL,-1,NULL},

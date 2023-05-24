@@ -13,9 +13,9 @@
 #include "port_system.h"
 
 /* Defines */
-#define BUZZER_0_ID 0
-#define BUZZER_0_PORT GPIOB
-#define BUZZER_0_PIN 1
+#define BUZZER_0_ID 0   /*!< Identification number for BUZZER system */
+#define BUZZER_0_PORT GPIOB /*!< Port to which the buzzer 0 is connected*/
+#define BUZZER_0_PIN 1  /*!< Pin to which the buzzer 0 is connected*/
 
 /**
  * @brief Function to init the HW of the buzzer

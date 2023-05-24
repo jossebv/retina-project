@@ -46,9 +46,9 @@ static const bool RHINO_REQUIRE_ENDPOINT = true;
 pv_inference_t *p_inference; // Pointer to the inference proccesed object
 bool isUnderstood;           // Boolean to confirm that the inference is understood
 
-////////////////////////////////////////////////
+
 /* Enums */
-////////////////////////////////////////////////
+
 /**
  * @brief States of the voice FSM
  *
@@ -58,9 +58,9 @@ enum
     WAIT_VOICE = 0,
 };
 
-////////////////////////////////////////////////
+
 /* Error handler */
-////////////////////////////////////////////////
+
 
 /**
  * @brief Infinite loop called by the picovoice object when it fails.
@@ -72,9 +72,9 @@ static void error_handler(void)
         ;
 }
 
-////////////////////////////////////////////////
+
 /* State machine input or transition functions */
-////////////////////////////////////////////////
+
 
 /**
  * @brief Checks if the buffer has an audio frame to procces.
@@ -107,9 +107,9 @@ static bool check_understood(fsm_t *p_this)
 {
     return isUnderstood;
 }
-////////////////////////////////////////////////
+
 /* State machine output or action functions */
-////////////////////////////////////////////////
+
 /**
  * @brief Process the audio buffer received
  * 
@@ -208,9 +208,9 @@ static void do_action(fsm_t *p_this)
     isUnderstood = false;
     pv_inference_delete(p_inference);
 }
-//////////////////////////////////////////////////
+
 /* Picovoice Callbacks */
-//////////////////////////////////////////////////
+
 /**
  * @brief Callback function that is called when the wake word is detected
  */
@@ -234,18 +234,23 @@ static void inference_callback(pv_inference_t *inference)
     isUnderstood = inference->is_understood;
 }
 
-////////////////////////////////////////////////
+
 /* Transition table */
-////////////////////////////////////////////////
+
+/**
+ * @brief Transition table for the fsm_voice
+ * 
+ * \image html fsm_states_voice.png
+*/
 static fsm_trans_t fsm_trans_voice[] = {
     {WAIT_VOICE, check_understood, WAIT_VOICE, do_action},
     {WAIT_VOICE, check_buffer, WAIT_VOICE, do_process},
     {-1, NULL, -1, NULL},
 };
 
-////////////////////////////////////////////////
+
 /* Other auxiliary functions */
-////////////////////////////////////////////////
+
 /**
  * @brief Inits the picovoice object with all the params needed
  *

@@ -17,6 +17,10 @@ typedef struct{
 } port_buzzer_t;
 
 /* Global variables */
+/**
+ * @brief Array with the port information of all buzzers connected
+ * 
+ */
 static port_buzzer_t port_buzzer_arr[] = {
     [BUZZER_0_ID] = {.p_port = BUZZER_0_PORT, .pin = BUZZER_0_PIN},
 };

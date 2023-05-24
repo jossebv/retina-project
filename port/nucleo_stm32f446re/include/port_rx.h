@@ -16,7 +16,7 @@
 
 /* Defines and enums ----------------------------------------------------------*/
 /* Defines */
-#define ARR_MAX_VALUE 0xffffffff
+#define ARR_MAX_VALUE 0xffffffff    /*!< Maximum value of the ARR register*/
 
 #define IR_RX_0_ID 0    /*!< Infrared receiver identifier*/
 #define IR_RX_0_GPIO GPIOA    /*!< Infrared receiver GPIO port*/

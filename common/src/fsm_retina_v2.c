@@ -125,6 +125,13 @@ static bool check_change_controller(fsm_t *p_this)
     return (duration > 0 && duration < p_fsm->long_button_press_ms);
 }
 
+/**
+ * @brief Checks if the button to turn on the system has been pressed
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
+ * @return true 
+ * @return false 
+ */
 static bool check_on_button(fsm_t *p_this)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
@@ -387,6 +394,11 @@ static void do_sleep(fsm_t *p_this)
     port_system_sleep();
 }
 
+/**
+ * @brief Function to turn on the system
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
+ */
 static void do_turn_on(fsm_t *p_this)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
@@ -395,6 +407,11 @@ static void do_turn_on(fsm_t *p_this)
     do_rx_off_tx_on(p_this);
 }
 
+/**
+ * @brief Function to turn off the system
+ * 
+ * @param p_this Pointer to an fsm_t struct that contains an fsm_retina_t
+ */
 static void do_turn_off(fsm_t *p_this)
 {
     fsm_retina_t *p_fsm = (fsm_retina_t *)p_this;
@@ -406,6 +423,11 @@ static void do_turn_off(fsm_t *p_this)
 }
 /*Transition table*/
 
+/**
+ * @brief Transition table for fsm_retina_v2
+ * 
+ * \image html fsm_states_retina_v2.png
+ */
 static fsm_trans_t fsm_trans_retina[] = {
     {OFF_RETINA, check_on_button, WAIT_TX, do_turn_on},
     {WAIT_TX, check_on_button, OFF_RETINA, do_turn_off},

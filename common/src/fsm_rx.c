@@ -37,10 +37,14 @@ typedef struct
 
 /* Defines and enums ----------------------------------------------------------*/
 /* Enums */
+/**
+ * @brief Enumeration with the states of the fsm_rx
+ * 
+ */
 enum FSM_RX {
-  OFF_RX = 0,
-  IDLE_RX,
-  WAIT_RX
+  OFF_RX = 0,       /*!< State of the RX off*/
+  IDLE_RX,          /*!< State of the RX without any signal received */
+  WAIT_RX           /*!< State of the RX while is receiving data*/
 };
 
 /* State machine input or transition functions */
@@ -170,6 +174,11 @@ static void do_update_len_and_timeout (fsm_t *p_this)
 }
 
 /* Transition table*/
+/**
+ * @brief Transition table of the RX FSM
+ * 
+ * \image html fsm_rx.png
+ */
 static fsm_trans_t fsm_trans_rx[] = {
   {OFF_RX, check_on_rx, IDLE_RX, do_rx_start},
   {IDLE_RX, check_off_rx, OFF_RX, do_rx_stop},

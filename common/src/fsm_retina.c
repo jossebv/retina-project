@@ -19,7 +19,7 @@
 
 /* Global variables */
 uint32_t color_mem = 0x0; /*!< Memory space with the last color when turned off the leds */
-bool rgb_state = false;
+bool rgb_state = false; /*!< Variable to save the state of the rgb led (For a better implementation this should be placed on port_rgb file)*/
 
 /* Enums */
 enum
@@ -320,7 +320,11 @@ void do_sleep(fsm_t *p_this)
 }
 
 /*Transition table*/
-
+/**
+ * @brief Transition table for retina FSM
+ * 
+ * \image html fsm_retina.png
+ */
 static fsm_trans_t fsm_trans_retina[] = {
     {WAIT_TX, check_short_pressed, WAIT_TX, do_send_next_msg},
     {WAIT_TX, check_long_pressed, WAIT_RX, do_tx_off_rx_on},

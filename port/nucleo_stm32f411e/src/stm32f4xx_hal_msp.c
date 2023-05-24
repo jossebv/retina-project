@@ -6,6 +6,10 @@
 
 #include "stm32f411e_discovery.h"
 
+/**
+ * @brief Low level HAL initialization
+ * 
+ */
 void HAL_MspInit(void)
 {
   __HAL_RCC_SYSCFG_CLK_ENABLE();

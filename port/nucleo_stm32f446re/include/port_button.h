@@ -19,7 +19,6 @@
 
 /* Defines and enums ----------------------------------------------------------*/
 /* Defines */
-#define BUTTONS_ROW 2
 
 #define BUTTON_0_ID 0   /*!< Button 0 ID*/
 #define BUTTON_0_GPIO GPIOC /*!< Button 0 Port to which it is connected*/

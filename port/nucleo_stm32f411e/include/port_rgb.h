@@ -49,7 +49,7 @@ void port_rgb_set_color(uint8_t rgb_id, uint8_t r, uint8_t g, uint8_t b);
  * 
  * Informs to the user that the operation has been a success
  * 
- * @param rgb_id 
+ * @param rgb_id This index is used to select the element of the rgb_arr[] array.
  */
 void port_rgb_success(uint8_t rgb_id);
 

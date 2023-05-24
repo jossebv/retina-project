@@ -164,6 +164,10 @@ void port_rx_clean_buffer(uint8_t rx_id)
 }
 
 /* Interruption Rutine Handler 9-5*/
+/**
+ * @brief Interruption handler for interruption from 9 to 5
+ * 
+ */
 void EXTI9_5_IRQHandler(void)
 {
   port_system_systick_resume();

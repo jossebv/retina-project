@@ -18,9 +18,7 @@
 
 #include "stm32f411e_discovery.h"
 #include "stm32f411e_discovery_audio.h"
-   
-#define PDM_OUT_Pin GPIO_PIN_3
-#define PDM_OUT_GPIO_Port GPIOC
+
 
 void NMI_Handler(void);
 void HardFault_Handler(void);

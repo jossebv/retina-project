@@ -23,13 +23,13 @@
 #define BIT_POS_TO_MASK(x) (0x01 << x)  /*!< Convert the index of a bit into a mask by left shifting */
 #define BASE_MASK_TO_POS(m, p) (m << p) /*!< Move a mask defined in the LSBs to upper positions by shifting left p bits */
 #define GET_PIN_IRQN(pin) (pin >= 10 ? EXTI15_10_IRQn : (pin >= 5 ? EXTI9_5_IRQn : (EXTI0_IRQn + pin))) /*!< Compute the IRQ number associated to a GPIO pin */
-#define TRIGGER_RISING_EDGE 0x1
-#define TRIGGER_FALLING_EDGE 0x2
-#define TRIGGER_BOTH_EDGE 0x3
-#define TRIGGER_ENABLE_EVENT_REQ 0x4
-#define TRIGGER_ENABLE_INTERR_REQ 0x8
-#define TRIGGER_ENABLE_EVENT_AND_INTERR_REQ 0xc
-#define BASE_ALTERNATE_MASK 0x0F
+#define TRIGGER_RISING_EDGE 0x1                     /*!< Mask for rising edge trigger*/
+#define TRIGGER_FALLING_EDGE 0x2                    /*!< Mask for falling edge trigger*/
+#define TRIGGER_BOTH_EDGE 0x3                       /*!< Mask for both edge trigger*/
+#define TRIGGER_ENABLE_EVENT_REQ 0x4                /*!< Mask for enabling event trigger*/
+#define TRIGGER_ENABLE_INTERR_REQ 0x8               /*!< Mask for enabling interruption trigger*/
+#define TRIGGER_ENABLE_EVENT_AND_INTERR_REQ 0xc     /*!< Mask for enabling both event/interruption triggers*/
+#define BASE_ALTERNATE_MASK 0x0F                    /*!< Mask for alternate mode*/
 
 #define BASE_MODER_MASK 0x03 /*!< Define MODER mask*/
 #define BASE_PUPDR_MASK 0x03 /*!< Define PUPDR mask*/
@@ -60,11 +60,11 @@
 #define GPIO_PUPDR_PDOWN 0x02  /*!< GPIO no pull down */
 
 /* UUID */
-#define UUID_ADDRESS (0x1FFF7A10)
-#define UUID_SIZE (12)
+#define UUID_ADDRESS (0x1FFF7A10)   /*!< UUID address*/
+#define UUID_SIZE (12)              /*!< UUID size in bytes*/
 
 /* SYSCLK FREQ */
-#define SYSCLOCK_FREQ 100000000
+#define SYSCLOCK_FREQ 100000000     /*!<SYSCLOCK frequency*/
 
 /* Function prototypes and explanation -------------------------------------------------*/
 
@@ -294,8 +294,18 @@ void port_system_gpio_write(GPIO_TypeDef *port, uint8_t pin, bool value);
  */
 void port_system_gpio_clear(GPIO_TypeDef *port);
 
+/**
+ * @brief Gets the uuid buffer
+ * 
+ * @return const uint8_t* 
+ */
 const uint8_t *pv_get_uuid(void);
 
+/**
+ * @brief Gets the uuid buffer size
+ * 
+ * @return uint32_t 
+ */
 uint32_t pv_get_uuid_size(void);
 
 

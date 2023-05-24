@@ -42,12 +42,12 @@ fsm_t *fsm_button_new(uint32_t debounce_time, uint32_t button_id);
 void fsm_button_init (fsm_t *p_this, uint32_t debounce_time, uint32_t button_id);
 
 /**
- * @brief Return the duration of the last button press
+ * @brief Return the duration of the last button press.
  * 
  * @param p_this Pointer to an fsm_t struct than contains an fsm_button_t
  * @return uint32_t 
  */
-uint32_t fsm_button_get_duration (fsm_t *p_this);
+uint32_t fsm_button_get_duration (fsm_t* p_this);
 
 /**
  * @brief Reset the duration of the last button press.

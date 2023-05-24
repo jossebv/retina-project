@@ -29,11 +29,15 @@ typedef struct
 
 /* Defines and enums ----------------------------------------------------------*/
 /* Enums */
+/**
+ * @brief Enumeration with the states of the FSM_RX_NEC
+ * 
+ */
 enum FSM_RX_NEC {
-  NEC_IDLE = 0,
-  NEC_INIT,
-  NEC_SYMBOL_SILENCE,
-  NEC_SYMBOL_PULSE
+  NEC_IDLE = 0,           /*!< State of the RX_NEC waiting for data*/
+  NEC_INIT,               /*!< State of the RX_NEC starting to process the data*/
+  NEC_SYMBOL_SILENCE,     /*!< State when a silence has been received*/
+  NEC_SYMBOL_PULSE        /*!< State when a pulse has been received*/
 };
 
 /* Private functions */
@@ -370,6 +374,12 @@ static void do_set_end(fsm_t *p_this)
 }
 
 /* Transition table*/
+/**
+ * @brief Transition table for the FSM_RX_NEC
+ * 
+ * \image html fsm_rx_nec.png
+ * 
+ */
 static fsm_trans_t fsm_trans_rx_nec[] = {
   {NEC_IDLE, check_is_init_noise, NEC_IDLE, do_reset_and_jump_two_edges},
   {NEC_IDLE, check_is_init_silence, NEC_INIT, do_reset_and_jump_to_next_edge},

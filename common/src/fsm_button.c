@@ -112,6 +112,7 @@ static void do_store_tick_pressed(fsm_t *p_this)
 /**
  * @brief Transition table for the button FSM
  * 
+ * \image html fsm_button.png
  */
 static fsm_trans_t fsm_trans_button[] = {
     {BUTTON_RELEASED, check_button_pressed, BUTTON_PRESSED_WAIT, do_store_tick_pressed},

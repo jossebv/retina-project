@@ -22,13 +22,13 @@
 #define BIT_POS_TO_MASK(x) (0x01 << x)  /*!< Convert the index of a bit into a mask by left shifting */
 #define BASE_MASK_TO_POS(m, p) (m << p) /*!< Move a mask defined in the LSBs to upper positions by shifting left p bits */
 #define GET_PIN_IRQN(pin) (pin >= 10 ? EXTI15_10_IRQn : (pin >= 5 ? EXTI9_5_IRQn : (EXTI0_IRQn + pin))) /*!< Compute the IRQ number associated to a GPIO pin */
-#define TRIGGER_RISING_EDGE 0x1
-#define TRIGGER_FALLING_EDGE 0x2
-#define TRIGGER_BOTH_EDGE 0x3
-#define TRIGGER_ENABLE_EVENT_REQ 0x4
-#define TRIGGER_ENABLE_INTERR_REQ 0x8
-#define TRIGGER_ENABLE_EVENT_AND_INTERR_REQ 0xc
-#define BASE_ALTERNATE_MASK 0x0F
+#define TRIGGER_RISING_EDGE 0x1                     /*!< Mask for rising edge trigger*/
+#define TRIGGER_FALLING_EDGE 0x2                    /*!< Mask for falling edge trigger*/
+#define TRIGGER_BOTH_EDGE 0x3                       /*!< Mask for both edge trigger*/
+#define TRIGGER_ENABLE_EVENT_REQ 0x4                /*!< Mask for enabling event trigger*/
+#define TRIGGER_ENABLE_INTERR_REQ 0x8               /*!< Mask for enabling interruption trigger*/
+#define TRIGGER_ENABLE_EVENT_AND_INTERR_REQ 0xc     /*!< Mask for enabling both event/interruption triggers*/
+#define BASE_ALTERNATE_MASK 0x0F                    /*!< Mask for alternate mode*/
 
 /* Microcontroller STM32F446RE */
 /* Timer configuration */
