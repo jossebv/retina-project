@@ -54,8 +54,6 @@ dkms.conf
 # Emacs
 *~
 
-# Doxygen
-docs/html/
 
 #Apple file
 .DS_Store
