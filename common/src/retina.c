@@ -57,6 +57,7 @@ int main(void)
 
     fsm_t *p_fsm_retina;
 
+
     if (VERSION < 5)
     {
         p_fsm_retina = fsm_retina_new(button_arr[0], 1000, p_fsm_tx, p_fsm_rx, 0);

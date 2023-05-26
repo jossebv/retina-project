@@ -30,7 +30,7 @@
 #define LIL_NUMBER_OF_BUTTONS 9     /*!< Liluco IR remote commands */
 
 /* Device: MY LED Strip Controller */
-#define MY_ON_BUTTON 0x00FF02FD /*!< My IR remote command for button ON*/
+#define MY_ON_BUTTON  0x00FF02FD /*!< My IR remote command for button ON*/
 #define MY_OFF_BUTTON 0x00FF02FD /*!< My IR remote command for button ON*/
 #define MY_RED_BUTTON 0x00FF1AE5    /*!< My IR remote command for button RED */
 #define MY_GREEN_BUTTON 0x00FF9A65  /*!< My IR remote command for button GREEN */

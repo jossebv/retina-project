@@ -74,11 +74,11 @@ void port_lcd_write_4pin(GPIO_TypeDef *port, uint8_t pin, uint8_t data, uint8_t 
         port_system_gpio_write(port, pin + i - 4, value);
     }
 
-    port_system_delay_micros(1);    /* Wait for 10 microseconds*/
+    port_system_delay_micros(50);    /* Wait for 500 microseconds*/
     port_system_gpio_write(port, ENABLE, 1);    /* Set ENABLE to 1*/
-    port_system_delay_micros(10);    /* Wait for 100 microseconds*/
+    port_system_delay_micros(50);    /* Wait for 500 microseconds*/
     port_system_gpio_write(port, ENABLE, 0);    /* Set ENABLE to 0*/
-    port_system_delay_micros(10);    /* Wait for 100 microseconds*/
+    port_system_delay_micros(50);    /* Wait for 500 microseconds*/
 
     //lower bits
     if(bits){
@@ -88,33 +88,33 @@ void port_lcd_write_4pin(GPIO_TypeDef *port, uint8_t pin, uint8_t data, uint8_t 
             port_system_gpio_write(port, pin + i, value);
         }
 
-        port_system_delay_micros(1);    /* Wait for 10 microseconds*/
+        port_system_delay_micros(50);    /* Wait for 500 microseconds*/
         port_system_gpio_write(port, ENABLE, 1);    /* Set ENABLE to 1*/
-        port_system_delay_micros(10);    /* Wait for 100 microseconds*/
+        port_system_delay_micros(50);    /* Wait for 500 microseconds*/
         port_system_gpio_write(port, ENABLE, 0);    /* Set ENABLE to 0*/
-        port_system_delay_micros(10);    /* Wait for 100 microseconds*/
+        port_system_delay_micros(50);    /* Wait for 500 microseconds*/
     }
     port_system_gpio_clear(port);   /* Clears the output*/
 }
 
 static void port_lcd_config_4pin(GPIO_TypeDef *port, uint8_t pin)
 {
-    port_system_delay_micros(5);    /* Waits 50 microseconds*/
+    port_system_delay_ms(15);    /* Waits 15 miliseconds*/
     port_lcd_write_4pin(port,pin, FUNCTION_SET(1,0,0), 0,0);   
-    port_system_delay_micros(1);    /* Waits 10 microseconds*/
+    port_system_delay_ms(5);    /* Waits 5 miliseconds*/
     port_lcd_write_4pin(port,pin, FUNCTION_SET(1,0,0), 0,0);
-    port_system_delay_micros(1);    /* Waits 10 microseconds*/
+    port_system_delay_micros(50);    /* Waits 150 microseconds*/
     port_lcd_write_4pin(port,pin, FUNCTION_SET(1,0,0), 0,0);
-    port_system_delay_micros(1);    /* Waits 10 microseconds*/
+    port_system_delay_micros(50);    /* Waits 10 microseconds*/
 
     port_lcd_write_4pin(port,pin, FUNCTION_SET(0,0,0), 0,0); /* One line, resolution of 8 points*/
-    port_system_delay_micros(5);
+    port_system_delay_micros(50);
     port_lcd_write_4pin(port,pin, DISPLAY_ON_OFF(0,0,0), 0,1); /* Display off*/
-    port_system_delay_micros(5);
+    port_system_delay_micros(50);
     port_lcd_write_4pin(port,pin, CLR_DISPLAY, 0,1);   /* Clear display*/
     port_system_delay_ms(2);
     port_lcd_write_4pin(port, pin, ENTRY_MODE_SET(1,0), 0,1);  /* Position on DDRAM increments when writing*/
-    port_system_delay_micros(1);
+    port_system_delay_micros(50);
     port_lcd_write_4pin(port, pin, DISPLAY_ON_OFF(1,0,0), 0,1); /* Display on*/
 }
 
@@ -123,13 +123,13 @@ void port_lcd_init(uint8_t lcd_id)
     GPIO_TypeDef *p_port = lcd_array[lcd_id].p_port;
     uint8_t pin = lcd_array[lcd_id].pin;
     /* Initialize all pins needed for the outputs*/
-    for (uint8_t i = 0; i < 6; i++)
+    for (uint8_t i = 0; i < 5; i++)
     {
         port_system_gpio_config(p_port, pin+i, OUTPUT_MASK, NO_PUPD_MASK);
     }
     //MODIFICAR AQUÍ PARA QUE EL TIM5 SIGA SIENDO 10us
-    uint64_t psc = ceil(((SystemCoreClock/2)/1000000)*LCD_INT_TIM_US)/((65535+1)) - 1;
-    uint64_t arr = ((SystemCoreClock/2)*LCD_INT_TIM_US)/(1000000*(psc+1)) - 1;
+    uint64_t psc = ceil(((SystemCoreClock/1)/1000000)*LCD_INT_TIM_US)/((65535+1)) - 1;
+    uint64_t arr = ((SystemCoreClock/1)*LCD_INT_TIM_US)/(1000000*(psc+1)) - 1;
     port_system_timer5_init(arr,psc); /* Enables the timer 5 to interrupt each 10 us*/
     port_lcd_config_4pin(p_port, pin); /* Instructions to setup the display*/
     port_lcd_write_4pin(p_port, pin, CLR_DISPLAY, 0, 1);
@@ -149,13 +149,13 @@ void port_lcd_print(uint8_t lcd_id, char string[])
     uint8_t pin = lcd_array[lcd_id].pin;
 
     port_lcd_write_4pin(p_port, pin, CLR_DISPLAY, 0,1); /* Clears the display*/
-    port_system_delay_ms(2);    /* Waits for the display to be cleaned*/
+    port_system_delay_ms(5);    /* Waits for the display to be cleaned*/
     uint8_t i = 0;
     while(string[i] != 0x0)
     {
         port_lcd_write_4pin(p_port, pin, string[i], 1,1);    /* Writes the char on the LCD memory*/
         i++;
-        port_system_delay_micros(5); /* Waits for the instruction be done*/
+        port_system_delay_micros(50); /* Waits for the instruction be done*/
     }
    
 }

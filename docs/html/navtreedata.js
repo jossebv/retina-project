@@ -25,7 +25,7 @@
 var NAVTREE =
 [
   [ "Retina: recepción y transmisión de infrarrojos", "index.html", [
-    [ "RETINA CONTROLLER", "index.html", "index" ],
+    [ "RETINA CONTROLLER Y CONVOICE", "index.html", "index" ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],

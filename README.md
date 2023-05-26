@@ -1,4 +1,4 @@
-# RETINA CONTROLLER
+# RETINA CONTROLLER Y CONVOICE
 El proyecto RETINA consiste en un controlador por infrarrojo para enviar y recibir señales de esta naturaleza. Se dispone de controles mediante botones y un controlador de voz para emplear con luces LED RGB, aunque puede ser extendido a cualquier dispositivo que acepte esta comunicación. Además, se puede conectar un panel LCD para disponer de trazas (la flag LCD_CONNECTED debe ser activada en el retina.h)
 
 Este proyecto dispone de dos versiones: 
@@ -8,7 +8,7 @@ También se puede configurar para que en receptor maneje un led conectado.
 
 Puedes acceder al vídeo del demostrador del proyecto pinchando en la imagen:
 
-[![Demostrador del proyecto Retina](https://github.com/sdg2DieUpm/retina/blob/assets/images/rgb_led_system_midjourney.png?raw=true)](https://youtu.be/7yMZnfwStgs "Demostrador del proyecto Retina. Imagen generada con Midjourney.")
+[![Demostrador del proyecto Retina y ConVoice](/images/miniatura_video.png)](https://youtu.be/4zYQlVsk_SM "Demostrador del proyecto Retina y ConVoice")
 
 Incluya la carpeta `retina-main` en la carpeta sdg. Esta carpeta incluye los drivers necesarios para la ejecución del sistema. Cabe recalcar que para utilizar la STM32F411-DISCO hace falta añadir otra carpeta con los drivers extra necesarios.
 

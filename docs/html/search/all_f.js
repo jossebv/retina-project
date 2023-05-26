@@ -6,7 +6,7 @@ var searchData=
   ['record_5fbuffer_5fsize_3',['record_buffer_size',['../pv__audio__rec_8c.html#a5add6482af26b4abeb087e9c0b7343ec',1,'pv_audio_rec.c']]],
   ['record_5fpcm_5fbuffer_4',['record_pcm_buffer',['../pv__audio__rec_8c.html#a00edb0a228b61f1c77b1cb5bc737dd83',1,'pv_audio_rec.c']]],
   ['record_5fpdm_5fbuffer_5',['record_pdm_buffer',['../pv__audio__rec_8c.html#a5c96ec66795b845ea77c58b693682c61',1,'pv_audio_rec.c']]],
-  ['retina_20controller_6',['RETINA CONTROLLER',['../index.html',1,'']]],
+  ['retina_20controller_20y_20convoice_6',['RETINA CONTROLLER Y CONVOICE',['../index.html',1,'']]],
   ['retina_2ec_7',['retina.c',['../retina_8c.html',1,'']]],
   ['retina_2eh_8',['retina.h',['../retina_8h.html',1,'']]],
   ['rgb_5f0_5fid_9',['RGB_0_ID',['../nucleo__stm32f411e_2include_2port__rgb_8h.html#a491c49eb3a99a151f357b1848879eb31',1,'RGB_0_ID():&#160;port_rgb.h'],['../nucleo__stm32f446re_2include_2port__rgb_8h.html#a491c49eb3a99a151f357b1848879eb31',1,'RGB_0_ID():&#160;port_rgb.h']]],

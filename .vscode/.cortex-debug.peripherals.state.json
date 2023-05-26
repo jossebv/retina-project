@@ -1,1 +1,1 @@
-[{"node":"TIM1.ARR","expanded":true,"format":1},{"node":"TIM2","expanded":true,"format":0,"pinned":false},{"node":"TIM2.PSC.PSC","format":2}]
+[{"node":"GPIOC","expanded":true,"format":0,"pinned":false},{"node":"GPIOC.ODR","expanded":true,"format":0},{"node":"TIM1.ARR","expanded":true,"format":1},{"node":"TIM2.PSC.PSC","format":2}]

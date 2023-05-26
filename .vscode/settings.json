@@ -16,7 +16,8 @@
         "fsm_voice.h": "c",
         "commands.h": "c",
         "fsm_retina.h": "c",
-        "fsm_button.h": "c"
+        "fsm_button.h": "c",
+        "fsm_rx.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }
